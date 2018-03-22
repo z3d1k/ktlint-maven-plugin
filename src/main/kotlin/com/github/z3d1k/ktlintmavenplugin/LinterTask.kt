@@ -15,6 +15,7 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.apache.maven.shared.utils.io.FileUtils
+import org.jetbrains.kotlin.backend.common.push
 import java.io.File
 import java.io.FileOutputStream
 import java.io.PrintStream
@@ -25,7 +26,7 @@ class LinterTask : AbstractMojo() {
     private lateinit var mavenProject: MavenProject
 
     @Parameter
-    private var includes: String = "src/**\\/*.kt,src/**\\/*.kts"
+    private var includes: String = "src\\/**\\/*.kt"
 
     @Parameter
     private var excludes: String? = null
@@ -34,7 +35,7 @@ class LinterTask : AbstractMojo() {
     private var outputToConsole: Boolean = true
 
     @Parameter
-    private var color: Boolean = true
+    private var color: Boolean = false
 
     @Parameter
     private var groupByFile: Boolean = true
@@ -43,7 +44,7 @@ class LinterTask : AbstractMojo() {
     private var pad: Boolean = false
 
     @Parameter
-    private var verbose: Boolean = false
+    private var verbose: Boolean = true
 
     @Parameter
     private val checkstyleReportPath: String? = null
@@ -52,12 +53,12 @@ class LinterTask : AbstractMojo() {
     private val jsonReportPath: String? = null
 
     @Parameter
-    private var failOnError: Boolean = false
+    private var failOnError: Boolean = true
 
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
         log.info("Ktlint lint task started")
-        val lintResults = lint(mavenProject.compileSourceRoots, includes, excludes)
+        val lintResults = lint(mavenProject.basedir, includes, excludes)
         generateReports(
                 outputToConsole,
                 color,
@@ -68,28 +69,26 @@ class LinterTask : AbstractMojo() {
                 jsonReportPath,
                 lintResults
         )
-        log.info("Ktlint lint task finished")
-        if (lintResults.isNotEmpty() && failOnError) {
-            throw MojoExecutionException("Failed during ktlint execution")
+        val errorCount: Int = lintResults.entries.fold(0, { count, entry -> entry.value.count() + count })
+        log.info("Ktlint lint task finished: $errorCount errors found in project")
+        if (errorCount != 0 && failOnError) {
+            throw MojoExecutionException("Failed during ktlint execution: $errorCount errors found in project")
         }
     }
 
     private fun lint(
-        dirList: List<String>?,
+        baseDirectory: File,
         includes: String,
         excludes: String?,
         userProperties: Map<String, String> = emptyMap()
     ): Map<String, List<LintError>> {
-        val eventMap: MutableMap<String, List<LintError>> = mutableMapOf()
-        dirList?.map { File(it) }
-                ?.flatMap { FileUtils.getFiles(it, includes, excludes, true) }
-                ?.map { file ->
-                    KtLint.lint(file.readText(), resolveRuleSets(), userProperties) { event ->
-                        val eventList = eventMap[file.path] ?: emptyList()
-                        eventMap[file.path] = eventList.plus(event)
-                    }
-                }
-        return eventMap
+        return baseDirectory
+                .let { FileUtils.getFiles(it, includes, excludes, true) }
+                .map { file ->
+                    val eventList = mutableListOf<LintError>()
+                    KtLint.lint(file.readText(), resolveRuleSets(), userProperties, { eventList.push(it) })
+                    file.path to eventList
+                }.toMap()
     }
 
     private fun generateReports(
@@ -103,12 +102,8 @@ class LinterTask : AbstractMojo() {
         lintResults: Map<String, List<LintError>>
     ) {
         val plainReporter = PlainReporter(System.out, verbose, groupByFile, color, pad).takeIf { outputToConsole }
-        val checkStyleReporter = checkstyleReportPath?.let { path ->
-            CheckStyleReporter(PrintStream(FileOutputStream(path)))
-        }
-        val jsonReporter = jsonReportPath?.let { path ->
-            JsonReporter(PrintStream(FileOutputStream(path)))
-        }
+        val checkStyleReporter = checkstyleReportPath?.let { CheckStyleReporter(getPrintStreamForReporter(it)) }
+        val jsonReporter = jsonReportPath?.let { JsonReporter(getPrintStreamForReporter(it)) }
         val reporters = listOfNotNull(plainReporter, checkStyleReporter, jsonReporter)
                 .toTypedArray()
                 .let { Reporter.from(*it) }
@@ -121,5 +116,11 @@ class LinterTask : AbstractMojo() {
             reporters.after(filePath)
         }
         reporters.afterAll()
+    }
+
+    private fun getPrintStreamForReporter(fileName: String): PrintStream {
+        // create intermediate directories, if not exists
+        File(fileName).parentFile.mkdirs()
+        return PrintStream(FileOutputStream(fileName))
     }
 }

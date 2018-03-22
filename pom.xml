@@ -4,7 +4,7 @@
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.1.0</version>
+    <version>0.1.2</version>
 
     <name>Ktlint maven plugin</name>
     <description>Kotlin lint maven plugin using ktlint</description>
@@ -165,48 +165,20 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <groupId>com.github.z3d1k</groupId>
+                <artifactId>ktlint-maven-plugin</artifactId>
+                <version>0.1.2</version>
                 <executions>
                     <execution>
-                        <id>ktlint</id>
-                        <phase>verify</phase>
-                        <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
-                                      classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
-                                    <arg value="src/**/*.kt"/>
-                                </java>
-                            </target>
-                        </configuration>
                         <goals>
-                            <goal>run</goal>
+                            <goal>lint</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>ktlint-format</id>
                         <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
-                                      classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
-                                    <arg value="-F"/>
-                                    <arg value="src/**/*.kt"/>
-                                </java>
-                            </target>
+                            <checkstyleReportPath>${project.build.directory}/ktlint.xml</checkstyleReportPath>
+                            <jsonReportPath>${project.build.directory}/ktlint.json</jsonReportPath>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.github.shyiko</groupId>
-                        <artifactId>ktlint</artifactId>
-                        <version>${ktlint.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
