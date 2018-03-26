@@ -1,6 +1,6 @@
 # Ktlint Maven Plugin
 [![Build Status](https://travis-ci.org/z3d1k/ktlint-maven-plugin.svg?branch=master)](https://travis-ci.org/z3d1k/ktlint-maven-plugin)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.z3d1k/ktlint-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.z3d1k/ktlint-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.z3d1k/ktlint-maven-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.z3d1k%22%20a%3A%22ktlint-maven-plugin%22)
 
 Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for maven
 
