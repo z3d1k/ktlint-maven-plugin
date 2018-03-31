@@ -1,4 +1,4 @@
-package com.github.z3d1k.ktlintmavenplugin
+package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.shyiko.ktlint.core.KtLint
 import com.github.shyiko.ktlint.core.LintError
@@ -6,7 +6,7 @@ import com.github.shyiko.ktlint.core.Reporter
 import com.github.shyiko.ktlint.reporter.checkstyle.CheckStyleReporter
 import com.github.shyiko.ktlint.reporter.json.JsonReporter
 import com.github.shyiko.ktlint.reporter.plain.PlainReporter
-import com.github.z3d1k.ktlintmavenplugin.support.resolveRuleSets
+import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException

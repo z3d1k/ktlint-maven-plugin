@@ -1,4 +1,4 @@
-package com.github.z3d1k.ktlintmavenplugin.support
+package com.github.z3d1k.maven.plugin.ktlint.support
 
 enum class ReporterType(val reporterName: String) {
     CHECKSTYLE("checkstyle"),

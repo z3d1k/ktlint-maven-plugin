@@ -1,4 +1,4 @@
-package com.github.z3d1k.ktlintmavenplugin.support
+package com.github.z3d1k.maven.plugin.ktlint.rules
 
 import com.github.shyiko.ktlint.core.RuleSet
 import com.github.shyiko.ktlint.core.RuleSetProvider
@@ -9,5 +9,5 @@ fun resolveRuleSets(
 ): List<RuleSet> {
     return providers
             .map { it.get() }
-            .sortedWith(compareBy { if (it.id == "standart") 0 else 1 })
+            .sortedWith(compareBy { if (it.id == "standard") 0 else 1 })
 }
