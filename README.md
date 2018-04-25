@@ -13,7 +13,7 @@ Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for m
         <plugin>
             <groupId>com.github.z3d1k</groupId>
             <artifactId>ktlint-maven-plugin</artifactId>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
             <executions>
                 <execution>
                     <goals>
@@ -31,7 +31,7 @@ Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for m
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <executions>
         <goals>
             <goal>lint</goal>
@@ -66,7 +66,7 @@ To use any custom (3rd party) ktlint reporter just add artifact to plugin depend
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
     <executions>
         ...
         <configuration>
