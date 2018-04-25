@@ -40,7 +40,7 @@ class LinterTask : AbstractMojo() {
     private var verbose: Boolean = false
 
     @Parameter
-    private var parameters: Map<String, String> = emptyMap()
+    private var reporters: Map<String, String> = emptyMap()
 
     @Parameter
     private var failOnError: Boolean = true
@@ -61,7 +61,7 @@ class LinterTask : AbstractMojo() {
             )
         }
 
-        val reporterParameters = ReporterParameters.fromParametersMap(parameters)
+        val reporterParameters = ReporterParameters.fromParametersMap(reporters)
         val reporterGenerator = ReportsGenerator(reporterParameters + listOfNotNull(consoleReporter))
 
         log.info("Ktlint lint task started")
