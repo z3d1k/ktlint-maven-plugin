@@ -31,7 +31,7 @@ class FormatTask : AbstractMojo() {
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
         log.info("Ktlint format task started")
-        var filesNumber: Int = 0
+        var filesNumber = 0
         val formattedCount = mavenProject.getSourceFiles(includes, excludes)
             .also { filesNumber = it.size }
             .map { formatFile(mavenProject.basedir, it, resolveRuleSets(), emptyMap()) }
