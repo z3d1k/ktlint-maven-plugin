@@ -70,7 +70,7 @@ class LinterTaskMojoTest {
     }
 
     private fun withScenario(name: String, block: (MavenProject, Log, Throwable?) -> Unit) {
-        val pom = File("target/test-scenarios/lint-$name/pom.xml")
+        val pom = File("target/test-classes/scenarios/lint-$name/pom.xml")
         assertTrue(pom.isFile)
         val mavenProject = rule.readMavenProject(pom.parentFile)
         val task = rule.lookupConfiguredMojo(mavenProject, "lint") as LinterTask

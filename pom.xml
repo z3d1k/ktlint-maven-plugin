@@ -208,7 +208,7 @@
                 </executions>
                 <configuration>
                     <includes>src/**/*.kt</includes>
-                    <excludes>src/test/scenarios/**/*.kt</excludes>
+                    <excludes>src/test/resources/**/*.kt</excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -229,28 +229,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-scenarios</id>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <phase>process-test-resources</phase>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/test-scenarios</outputDirectory>
-                            <overwrite>true</overwrite>
-                            <resources>
-                                <resource>
-                                    <directory>src/test/scenarios</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
