@@ -4,6 +4,7 @@ import com.github.shyiko.ktlint.core.KtLint
 import com.github.shyiko.ktlint.core.LintError
 import com.github.shyiko.ktlint.core.RuleSet
 import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
+import com.github.z3d1k.maven.plugin.ktlint.utils.getEditorConfig
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -43,8 +44,9 @@ class FormatTask : AbstractMojo() {
         base: File,
         file: File,
         ruleSet: List<RuleSet>,
-        userProperties: Map<String, String>
+        userProperties: Map<String, String>? = null
     ): Boolean {
+        val properties = userProperties ?: mavenProject.getEditorConfig()
         val filePath = file.toRelativeString(base)
         val sourceText = file.readText()
         val correctedErrors = mutableListOf<LintError>()
@@ -57,7 +59,7 @@ class FormatTask : AbstractMojo() {
                 return false
             }
         }
-        val formattedSource = formatFunc(sourceText, ruleSet, userProperties) { lintError, corrected ->
+        val formattedSource = formatFunc(sourceText, ruleSet, properties) { lintError, corrected ->
             if (corrected) {
                 correctedErrors += lintError
             } else {
