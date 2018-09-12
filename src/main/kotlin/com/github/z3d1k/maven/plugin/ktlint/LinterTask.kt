@@ -5,6 +5,7 @@ import com.github.shyiko.ktlint.core.LintError
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
+import com.github.z3d1k.maven.plugin.ktlint.utils.getEditorConfig
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -87,13 +88,14 @@ class LinterTask : AbstractMojo() {
         mavenProject: MavenProject,
         includes: String,
         excludes: String?,
-        userProperties: Map<String, String> = emptyMap()
+        userProperties: Map<String, String>? = null
     ): Map<String, List<LintError>> {
+        val properties = userProperties ?: mavenProject.getEditorConfig()
         return mavenProject
             .getSourceFiles(includes, excludes)
             .map { file ->
                 val eventList = mutableListOf<LintError>()
-                KtLint.lint(file.readText(), resolveRuleSets(), userProperties) { eventList.push(it) }
+                KtLint.lint(file.readText(), resolveRuleSets(), properties) { eventList.push(it) }
                 file.path to eventList
             }.toMap()
     }

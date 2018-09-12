@@ -56,6 +56,19 @@ class LinterTaskMojoTest {
         verifyNoMoreInteractions(log)
     }
 
+    @Test
+    fun editorConfigProperties() = withScenario("editorconfig-properties") { _, log, throwable ->
+        throwable?.let {
+            assertTrue(it is MojoFailureException)
+            assertEquals("Failed during ktlint execution: found 1 errors in 1 files", it.message)
+        } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
+
+        verify(log).info("Ktlint lint task started")
+        verify(log).info("Ktlint lint task finished: 1 files was checked")
+        verify(log).error("Found 1 errors in 1 files")
+        verifyNoMoreInteractions(log)
+    }
+
     private fun withScenario(name: String, block: (MavenProject, Log, Throwable?) -> Unit) {
         val pom = File("target/test-scenarios/lint-$name/pom.xml")
         assertTrue(pom.isFile)
