@@ -15,7 +15,10 @@ data class ReporterParameters(
                     .map { (key, value) ->
                         val splittedKey = key.split(".", limit = 2)
                         if (splittedKey.count() != 2) {
-                            throw IllegalArgumentException("Reporter parameters must be formatted like this: <{reporter_name}.{parameter_key}>{value}</{reporter_name}.{parameter_key}>")
+                            throw IllegalArgumentException(
+                                "Reporter parameters must be formatted like this:\n" +
+                                    "<{reporter_name}.{parameter_key}>{value}</{reporter_name}.{parameter_key}>"
+                            )
                         }
                         val (reporterName, parameterKey) = splittedKey
                         reporterName to (parameterKey to value)

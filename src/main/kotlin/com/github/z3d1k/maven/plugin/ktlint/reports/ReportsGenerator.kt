@@ -16,7 +16,9 @@ class ReportsGenerator(
         val reportersList = reporterParameters
                 .map { (name, printStream, parameters) ->
                     reporterProvidersMap[name]?.get(printStream, parameters)
-                            ?: throw IllegalArgumentException("Unable to initialize reporter with $name: unknown reporter name")
+                            ?: throw IllegalArgumentException(
+                                "Unable to initialize reporter with $name: unknown reporter name"
+                            )
                 }
         reporter = Reporter.from(*reportersList.toTypedArray())
     }
