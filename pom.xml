@@ -37,8 +37,11 @@
         <kotlin.version>1.2.61</kotlin.version>
         <ktlint.version>0.28.0</ktlint.version>
 
+        <mockitokotlin.version>2.0.0-RC2</mockitokotlin.version>
         <junit.version>4.12</junit.version>
         <maven-sources-plugin.version>3.0.1</maven-sources-plugin.version>
+        <maven-plugin-testing-harness.version>3.3.0</maven-plugin-testing-harness.version>
+        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
     </properties>
 
     <distributionManagement>
@@ -99,6 +102,24 @@
             <version>${ktlint.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>${maven-plugin-testing-harness.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-compat</artifactId>
+            <version>${maven-plugin-api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nhaarman.mockitokotlin2</groupId>
+            <artifactId>mockito-kotlin</artifactId>
+            <version>${mockitokotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -187,6 +208,7 @@
                 </executions>
                 <configuration>
                     <includes>src/**/*.kt</includes>
+                    <excludes>src/test/scenarios/**/*.kt</excludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -200,6 +222,33 @@
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-scenarios</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/test-scenarios</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/scenarios</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

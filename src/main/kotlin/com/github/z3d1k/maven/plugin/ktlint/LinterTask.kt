@@ -76,7 +76,7 @@ class LinterTask : AbstractMojo() {
         if (errorCount != 0) {
             log.error("Found $errorCount errors in $filesWithErrorsCount files")
             if (failOnError) {
-                throw MojoExecutionException(
+                throw MojoFailureException(
                     "Failed during ktlint execution: found $errorCount errors in $filesWithErrorsCount files"
                 )
             }
