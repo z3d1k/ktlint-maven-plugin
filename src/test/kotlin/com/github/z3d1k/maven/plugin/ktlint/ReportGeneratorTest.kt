@@ -17,18 +17,21 @@ class ReportGeneratorTest {
         "test.kt" to listOf(LintError(1, 1, "test-rule", "test"), LintError(1, 2, "test-rule", "test_2"))
     )
 
-    val expectedPlainOutput = """
+    val expectedPlainOutput =
+        """
 test.kt:1:1: test
 test.kt:1:2: test_2
 """.trim()
 
-    val expectedPlainOutput_group_verbose = """
+    val expectedPlainOutput_group_verbose =
+        """
 test.kt
   1:1 test (test-rule)
   1:2 test_2 (test-rule)
 """.trim()
 
-    val expectedJsonOutput = """
+    val expectedJsonOutput =
+        """
 [
 	{
 		"file": "test.kt",
@@ -50,7 +53,8 @@ test.kt
 ]
 """.trim()
 
-    val expectedCheckstyleOutput = """
+    val expectedCheckstyleOutput =
+        """
 <?xml version="1.0" encoding="utf-8"?>
 <checkstyle version="8.0">
 	<file name="test.kt">
@@ -71,7 +75,7 @@ test.kt
             ReporterParameters("plain", PrintStream(plainOutput), mapOf("verbose" to "true", "group_by_file" to "true"))
         )
         ReportsGenerator(reporterParams)
-                .generateReports(errorsMap)
+            .generateReports(errorsMap)
         val plainOutputString = plainOutput.toString().trim()
         val jsonOutputString = jsonOutput.toString().trim()
         val checkstyleOutputString = checkstyleOutput.toString().trim()
