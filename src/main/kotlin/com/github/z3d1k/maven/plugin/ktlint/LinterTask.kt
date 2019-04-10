@@ -40,6 +40,9 @@ class LinterTask : AbstractMojo() {
     private var verbose: Boolean = false
 
     @Parameter
+    private var enableExperimentalRules: Boolean = false
+
+    @Parameter
     private var reporters: Map<String, String> = emptyMap()
 
     @Parameter
@@ -65,7 +68,7 @@ class LinterTask : AbstractMojo() {
         val reporterGenerator = ReportsGenerator(reporterParameters + listOfNotNull(consoleReporter))
 
         log.info("Ktlint lint task started")
-        val lintResults = lint(mavenProject, includes, excludes)
+        val lintResults = lint(mavenProject, includes, excludes, enableExperimentalRules)
         reporterGenerator.generateReports(lintResults)
         log.info("Ktlint lint task finished: ${lintResults.size} files was checked")
 
@@ -88,15 +91,18 @@ class LinterTask : AbstractMojo() {
         mavenProject: MavenProject,
         includes: String,
         excludes: String?,
+        enableExperimentalRules: Boolean = false,
         userProperties: Map<String, String>? = null
     ): Map<String, List<LintError>> {
         val properties = userProperties ?: mavenProject.getEditorConfig()
         return mavenProject
             .getSourceFiles(includes, excludes)
-            .map { file ->
+            .associate { file ->
                 val eventList = mutableListOf<LintError>()
-                KtLint.lint(file.readText(), resolveRuleSets(), properties) { eventList.push(it) }
+                KtLint.lint(file.readText(), resolveRuleSets(enableExperimentalRules), properties) {
+                    eventList.push(it)
+                }
                 file.path to eventList
-            }.toMap()
+            }
     }
 }

@@ -28,15 +28,18 @@ class FormatTask : AbstractMojo() {
     @Parameter
     private var excludes: String? = null
 
+    @Parameter
+    private var enableExperimentalRules: Boolean = false
+
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
         log.info("Ktlint format task started")
-        var filesNumber = 0
-        val formattedCount = mavenProject.getSourceFiles(includes, excludes)
-            .also { filesNumber = it.size }
-            .map { formatFile(mavenProject.basedir, it, resolveRuleSets(), emptyMap()) }
-            .filter { it }
-            .size
+        var filesNumber: Int
+        val formattedCount =
+            mavenProject.getSourceFiles(includes, excludes)
+                .also { filesNumber = it.size }
+                .map { formatFile(mavenProject.basedir, it, resolveRuleSets(enableExperimentalRules), emptyMap()) }
+                .count { it }
         log.info("Ktlint format task finished: $formattedCount of $filesNumber files was formatted")
     }
 

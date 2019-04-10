@@ -5,9 +5,11 @@ import com.github.shyiko.ktlint.core.RuleSetProvider
 import java.util.ServiceLoader
 
 fun resolveRuleSets(
+    enableExperimentalRules: Boolean = false,
     providers: Iterable<RuleSetProvider> = ServiceLoader.load(RuleSetProvider::class.java)
 ): List<RuleSet> {
     return providers
-            .map { it.get() }
-            .sortedWith(compareBy { if (it.id == "standard") 0 else 1 })
+        .map(RuleSetProvider::get)
+        .filter { ruleSet -> ruleSet.id != "experimental" || enableExperimentalRules }
+        .sortedWith(compareBy { if (it.id == "standard") 0 else 1 })
 }
