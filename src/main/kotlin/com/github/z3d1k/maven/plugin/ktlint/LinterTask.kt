@@ -16,7 +16,7 @@ import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import org.jetbrains.kotlin.backend.common.push
 
-@Mojo(name = "lint", defaultPhase = LifecyclePhase.VALIDATE)
+@Mojo(name = "lint", defaultPhase = LifecyclePhase.VALIDATE, threadSafe = true)
 class LinterTask : AbstractMojo() {
     @Parameter(defaultValue = "\${project}", readonly = true)
     private lateinit var mavenProject: MavenProject

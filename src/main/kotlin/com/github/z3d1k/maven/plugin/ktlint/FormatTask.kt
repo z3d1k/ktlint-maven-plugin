@@ -17,7 +17,7 @@ import java.io.File
 
 typealias FormatFunction = (String, Iterable<RuleSet>, Map<String, String>, (LintError, Boolean) -> Unit) -> String
 
-@Mojo(name = "format", defaultPhase = LifecyclePhase.NONE)
+@Mojo(name = "format", defaultPhase = LifecyclePhase.NONE, threadSafe = true)
 class FormatTask : AbstractMojo() {
     @Parameter(defaultValue = "\${project}", readonly = true)
     private lateinit var mavenProject: MavenProject
