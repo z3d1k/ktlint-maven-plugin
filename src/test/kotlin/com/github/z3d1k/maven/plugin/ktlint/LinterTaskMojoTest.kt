@@ -10,6 +10,7 @@ import org.apache.maven.plugin.testing.MojoRule
 import org.apache.maven.project.MavenProject
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -28,8 +29,9 @@ class LinterTaskMojoTest {
         } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
 
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files was checked")
-        verify(log).error("Found 1 errors in 1 files")
+        verify(log).error("src/main/kotlin/com/example/Example.kt")
+        verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
+        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -40,8 +42,9 @@ class LinterTaskMojoTest {
         }
 
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files was checked")
-        verify(log).error("Found 1 errors in 1 files")
+        verify(log).error("src/main/kotlin/com/example/Example.kt")
+        verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
+        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -64,8 +67,9 @@ class LinterTaskMojoTest {
         } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
 
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files was checked")
-        verify(log).error("Found 1 errors in 1 files")
+        verify(log).error("src/main/kotlin/com/example/Example.kt")
+        verify(log).error(Mockito.contains("Exceeded max line length"))
+        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -77,8 +81,10 @@ class LinterTaskMojoTest {
         } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
 
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 2 files was checked")
-        verify(log).error("Found 2 errors in 1 files")
+        verify(log).error("src/main/kotlin/com/example/NotSuppressed.kt")
+        verify(log).error(Mockito.contains("Wildcard import"))
+        verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
+        verify(log).error("Ktlint lint task finished: 2 files was checked, found 2 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 

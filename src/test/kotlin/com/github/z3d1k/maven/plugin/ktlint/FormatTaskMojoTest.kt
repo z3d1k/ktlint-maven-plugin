@@ -20,15 +20,14 @@ class FormatTaskMojoTest {
     @Test
     fun nothingToFormat() = withScenario("nothing-to-format") { _, log ->
         verify(log).info("Ktlint format task started")
-        verify(log).info("Ktlint format task finished: 0 of 1 files was formatted")
+        verify(log).info("Ktlint format task finished: 0 of 1 files was corrected")
         verifyNoMoreInteractions(log)
     }
 
     @Test
     fun fixFormatting() = withScenario("fix-file") { _, log ->
         verify(log).info("Ktlint format task started")
-        verify(log).info("src/main/kotlin/com/example/Example.kt formatted")
-        verify(log).info("Ktlint format task finished: 1 of 1 files was formatted")
+        verify(log).info("Ktlint format task finished: 1 of 1 files was corrected")
         verifyNoMoreInteractions(log)
     }
 

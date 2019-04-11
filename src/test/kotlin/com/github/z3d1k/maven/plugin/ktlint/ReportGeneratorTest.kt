@@ -3,6 +3,8 @@ package com.github.z3d1k.maven.plugin.ktlint
 import com.github.shyiko.ktlint.core.LintError
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
+import com.nhaarman.mockitokotlin2.mock
+import org.apache.maven.plugin.logging.Log
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -74,7 +76,8 @@ test.kt
             ReporterParameters("checkstyle", PrintStream(checkstyleOutput), emptyMap()),
             ReporterParameters("plain", PrintStream(plainOutput), mapOf("verbose" to "true", "group_by_file" to "true"))
         )
-        ReportsGenerator(reporterParams)
+        val log = mock<Log>()
+        ReportsGenerator(log, reporterParams)
             .generateReports(errorsMap)
         val plainOutputString = plainOutput.toString().trim()
         val jsonOutputString = jsonOutput.toString().trim()
