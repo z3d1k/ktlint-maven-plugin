@@ -4,7 +4,7 @@
 [ ![Download](https://api.bintray.com/packages/z3d1k/maven/ktlint-maven-plugin/images/download.svg) ](https://bintray.com/z3d1k/maven/ktlint-maven-plugin/_latestVersion)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
-Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for maven
+Wrapper plugin over the [ktlint](https://github.com/pinterest/ktlint) project for maven
 
 ## Usage
 ```xml
@@ -14,7 +14,7 @@ Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for m
         <plugin>
             <groupId>com.github.z3d1k</groupId>
             <artifactId>ktlint-maven-plugin</artifactId>
-            <version>0.1.7</version>
+            <version>0.2.0</version>
             <executions>
                 <execution>
                     <id>lint</id>
@@ -39,7 +39,7 @@ Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for m
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.1.7</version>
+    <version>0.2.0</version>
     <executions>
         <goals>
             <goal>lint</goal>
@@ -47,10 +47,7 @@ Wrapper plugin over the [ktlint](https://github.com/shyiko/ktlint) project for m
         <configuration>
              <includes>src/**/*.kt</includes>
              <excludes>src/**/Generated*.kt</excludes>
-             <outputToConsole>true</outputToConsole>
-             <color>true</color>
-             <groupByFile>true</groupByFile>
-             <verbose>true</verbose>
+             <enableExperimentalRules>true</enableExperimentalRules>
              <reporters>
                  <checkstyle.output>${project.build.directory}/ktlint.xml</checkstyle.output>
                  <json.output>${project.build.directory}/ktlint.json</json.output>
@@ -74,7 +71,7 @@ To use any custom (3rd party) ktlint reporter just add an artifact to plugin dep
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.1.7</version>
+    <version>0.2.0</version>
     <executions>
         ...
         <configuration>
