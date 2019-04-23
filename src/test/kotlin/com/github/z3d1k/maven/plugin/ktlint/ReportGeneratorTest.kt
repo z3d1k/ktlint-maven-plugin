@@ -1,16 +1,16 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
-import com.pinterest.ktlint.core.LintError
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.nhaarman.mockitokotlin2.mock
+import com.pinterest.ktlint.core.LintError
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import kotlin.test.assertEquals
 import org.apache.maven.plugin.logging.Log
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import kotlin.test.assertEquals
 
 @RunWith(JUnit4::class)
 class ReportGeneratorTest {

@@ -1,12 +1,12 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
+import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
 import com.pinterest.ktlint.core.RuleSet
-import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
-import org.jetbrains.kotlin.backend.common.push
 import java.io.File
+import org.jetbrains.kotlin.backend.common.push
 
 typealias FormatFunction = (String, Iterable<RuleSet>, Map<String, String>, (LintError, Boolean) -> Unit) -> String
 
