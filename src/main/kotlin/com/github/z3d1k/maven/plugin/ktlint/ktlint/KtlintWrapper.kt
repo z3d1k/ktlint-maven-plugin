@@ -1,9 +1,9 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
-import com.github.shyiko.ktlint.core.KtLint
-import com.github.shyiko.ktlint.core.LintError
-import com.github.shyiko.ktlint.core.Reporter
-import com.github.shyiko.ktlint.core.RuleSet
+import com.pinterest.ktlint.core.KtLint
+import com.pinterest.ktlint.core.LintError
+import com.pinterest.ktlint.core.Reporter
+import com.pinterest.ktlint.core.RuleSet
 import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import org.jetbrains.kotlin.backend.common.push
 import java.io.File

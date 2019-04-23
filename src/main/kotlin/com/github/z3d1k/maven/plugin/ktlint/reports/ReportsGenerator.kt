@@ -1,8 +1,8 @@
 package com.github.z3d1k.maven.plugin.ktlint.reports
 
-import com.github.shyiko.ktlint.core.LintError
-import com.github.shyiko.ktlint.core.Reporter
-import com.github.shyiko.ktlint.core.ReporterProvider
+import com.pinterest.ktlint.core.LintError
+import com.pinterest.ktlint.core.Reporter
+import com.pinterest.ktlint.core.ReporterProvider
 import org.apache.maven.plugin.logging.Log
 import java.util.ServiceLoader
 

@@ -1,6 +1,6 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
-import com.github.shyiko.ktlint.core.LintError
+import com.pinterest.ktlint.core.LintError
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.nhaarman.mockitokotlin2.mock

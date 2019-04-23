@@ -1,7 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint.reports
 
-import com.github.shyiko.ktlint.core.LintError
-import com.github.shyiko.ktlint.core.Reporter
+import com.pinterest.ktlint.core.LintError
+import com.pinterest.ktlint.core.Reporter
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.shared.utils.logging.MessageUtils
 import java.io.File

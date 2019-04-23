@@ -1,7 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint.rules
 
-import com.github.shyiko.ktlint.core.RuleSet
-import com.github.shyiko.ktlint.core.RuleSetProvider
+import com.pinterest.ktlint.core.RuleSet
+import com.pinterest.ktlint.core.RuleSetProvider
 import java.util.ServiceLoader
 
 fun resolveRuleSets(
