@@ -27,7 +27,7 @@ class ReportsGenerator(
 
     fun generateReports(lintResults: Map<String, List<LintError>>) {
         reporter.beforeAll()
-        lintResults.forEach { fileName, lintErrors ->
+        lintResults.forEach { (fileName, lintErrors) ->
             reporter.before(fileName)
             lintErrors.map {
                 reporter.onLintError(fileName, it, false)

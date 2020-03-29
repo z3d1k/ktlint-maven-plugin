@@ -4,11 +4,7 @@ import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
-import com.pinterest.ktlint.core.RuleSet
 import java.io.File
-import org.jetbrains.kotlin.backend.common.push
-
-typealias FormatFunction = (String, Iterable<RuleSet>, Map<String, String>, (LintError, Boolean) -> Unit) -> String
 
 data class LintSummary(val files: Int = 0, val filesWithErrors: Int = 0, val errors: Int = 0) {
     val hasErrors: Boolean by lazy { errors > 0 }
@@ -41,10 +37,17 @@ fun lintFile(
     val filePath = file.toRelativeString(baseDir)
     reporter.before(filePath)
     val eventList = mutableListOf<LintError>()
-    KtLint.lint(file.readText(), resolveRuleSets(enableExperimentalRules), userProperties) { error ->
-        eventList.push(error)
-        reporter.onLintError(filePath, error, false)
-    }
+    KtLint.lint(
+        KtLint.Params(
+            text = file.readText(),
+            ruleSets = resolveRuleSets(enableExperimentalRules),
+            userData = userProperties,
+            cb = { error, corrected ->
+                eventList.add(error)
+                reporter.onLintError(filePath, error, corrected)
+            }
+        )
+    )
     reporter.after(filePath)
     return LintSummary(1, if (eventList.isEmpty()) 0 else 1, eventList.size)
 }
@@ -56,19 +59,20 @@ fun formatFile(
     enableExperimentalRules: Boolean,
     userProperties: Map<String, String> = emptyMap()
 ): FormatSummary {
+    if (!listOf("kt", "kts").contains(file.extension.toLowerCase())) {
+        return FormatSummary()
+    }
     val filePath = file.toRelativeString(base)
     val sourceText = file.readText()
-    val formatFunc: FormatFunction = when (file.extension) {
-        "kt" -> KtLint::format
-        "kts" -> KtLint::formatScript
-        else -> {
-            return FormatSummary()
-        }
-    }
-    val formattedSource =
-        formatFunc(sourceText, resolveRuleSets(enableExperimentalRules), userProperties) { lintError, corrected ->
-            reporter.onLintError(filePath, lintError, corrected)
-        }
+    val formattedSource = KtLint.format(
+        KtLint.Params(
+            text = sourceText,
+            ruleSets = resolveRuleSets(enableExperimentalRules),
+            userData = userProperties,
+            script = file.extension.equals("kts", ignoreCase = true),
+            cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
+        )
+    )
     val isFormatted = formattedSource !== sourceText
     if (isFormatted) {
         file.writeText(formattedSource)

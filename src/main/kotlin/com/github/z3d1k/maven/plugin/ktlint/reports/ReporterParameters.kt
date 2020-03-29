@@ -1,5 +1,6 @@
 package com.github.z3d1k.maven.plugin.ktlint.reports
 
+import com.pinterest.ktlint.reporter.plain.internal.Color
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Files
@@ -27,10 +28,18 @@ data class ReporterParameters(
                 .map { it.key to it.value.toMap() }
                 .map { (name, params) ->
                     val reporterName = if (name == "console") "plain" else name
+
+                    val reporterParametersMap =
+                        if (reporterName == "plain" && !params.containsKey("color_name")) {
+                            params + ("color_name" to Color.LIGHT_GRAY.name)
+                        } else {
+                            params
+                        } - "output"
+
                     ReporterParameters(
                         reporterName,
                         getPrintStreamByFilename(name, params["output"]),
-                        params - "output"
+                        reporterParametersMap
                     )
                 }
         }
