@@ -39,6 +39,7 @@ fun lintFile(
     val eventList = mutableListOf<LintError>()
     KtLint.lint(
         KtLint.Params(
+            fileName = file.canonicalPath,
             text = file.readText(),
             ruleSets = resolveRuleSets(enableExperimentalRules),
             userData = userProperties,
@@ -66,6 +67,7 @@ fun formatFile(
     val sourceText = file.readText()
     val formattedSource = KtLint.format(
         KtLint.Params(
+            fileName = file.canonicalPath,
             text = sourceText,
             ruleSets = resolveRuleSets(enableExperimentalRules),
             userData = userProperties,

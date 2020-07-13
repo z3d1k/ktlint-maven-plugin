@@ -4,7 +4,6 @@ import com.github.z3d1k.maven.plugin.ktlint.ktlint.LintSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.lintFile
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
-import com.github.z3d1k.maven.plugin.ktlint.utils.getEditorConfig
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -39,8 +38,6 @@ class LinterTask : AbstractMojo() {
         val reporterParameters = ReporterParameters.fromParametersMap(reporters)
         val reporter = ReportsGenerator(log, reporterParameters)
 
-        val editorConfigProperties = mavenProject.getEditorConfig()
-
         log.info("Ktlint lint task started")
         reporter.beforeAll()
         val lintSummary =
@@ -51,8 +48,7 @@ class LinterTask : AbstractMojo() {
                         reporter,
                         mavenProject.basedir,
                         file,
-                        enableExperimentalRules,
-                        editorConfigProperties
+                        enableExperimentalRules
                     )
                 }
         reporter.afterAll()

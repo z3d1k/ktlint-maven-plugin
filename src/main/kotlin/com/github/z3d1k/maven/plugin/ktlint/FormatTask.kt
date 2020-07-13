@@ -3,7 +3,6 @@ package com.github.z3d1k.maven.plugin.ktlint
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.FormatSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.formatFile
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
-import com.github.z3d1k.maven.plugin.ktlint.utils.getEditorConfig
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -31,8 +30,6 @@ class FormatTask : AbstractMojo() {
     override fun execute() {
         val reporter = ReportsGenerator(log)
 
-        val editorConfigProperties = mavenProject.getEditorConfig()
-
         log.info("Ktlint format task started")
         reporter.beforeAll()
         val formatSummary =
@@ -43,8 +40,7 @@ class FormatTask : AbstractMojo() {
                         reporter,
                         mavenProject.basedir,
                         file,
-                        enableExperimentalRules,
-                        editorConfigProperties
+                        enableExperimentalRules
                     )
                 }
         reporter.afterAll()

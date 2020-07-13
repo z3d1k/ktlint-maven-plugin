@@ -11,11 +11,9 @@ class MavenReporter(private val log: Log) : Reporter {
     private val accumulator by lazy { ConcurrentHashMap<String, MutableList<LintError>>() }
 
     override fun onLintError(file: String, err: LintError, corrected: Boolean) {
-        if (corrected) {
-            return
+        if (!corrected) {
+            accumulator.getOrPut(file, ::mutableListOf).add(err)
         }
-
-        accumulator.getOrPut(file, ::mutableListOf).add(err)
     }
 
     override fun after(file: String) {

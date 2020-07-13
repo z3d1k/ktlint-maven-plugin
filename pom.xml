@@ -32,10 +32,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <maven-plugin-api.version>3.5.0</maven-plugin-api.version>
-        <maven-plugin.version>3.5</maven-plugin.version>
-        <kotlin.version>1.3.71</kotlin.version>
-        <ktlint.version>0.36.0</ktlint.version>
+        <maven-plugin-api.version>3.6.0</maven-plugin-api.version>
+        <maven-plugin.version>3.6.0</maven-plugin.version>
+        <kotlin.version>1.3.72</kotlin.version>
+        <ktlint.version>0.37.2</ktlint.version>
 
         <mockitokotlin.version>2.1.0</mockitokotlin.version>
         <junit.version>4.12</junit.version>
@@ -58,7 +58,7 @@
     <repositories>
         <repository>
             <id>jcenter</id>
-            <url>http://jcenter.bintray.com/</url>
+            <url>https://jcenter.bintray.com/</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
@@ -69,7 +69,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>jcenter</id>
-            <url>http://jcenter.bintray.com/</url>
+            <url>https://jcenter.bintray.com/</url>
             <layout>default</layout>
             <snapshots>
                 <enabled>false</enabled>
