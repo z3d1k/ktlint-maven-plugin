@@ -11,7 +11,10 @@ import org.apache.maven.plugin.testing.MojoRule
 import org.apache.maven.project.MavenProject
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(JUnit4::class)
 class FormatTaskMojoTest {
     @Rule
     @JvmField

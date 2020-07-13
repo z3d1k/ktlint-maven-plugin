@@ -2,6 +2,7 @@ package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
+import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
 import com.nhaarman.mockitokotlin2.mock
 import com.pinterest.ktlint.core.LintError
 import java.io.ByteArrayOutputStream
@@ -74,14 +75,18 @@ class ReportGeneratorTest {
             test.kt
               1:1 test (test-rule)
               1:2 test_2 (test-rule)
-            """.trimIndent()
+            """
+                .trimIndent()
+                .normalizeLineEndings()
 
         private val expectedPlainOutputGroupVerboseColored =
             """
             ${"\u001B[94m\u001B[0m"}test.kt
               1${"\u001B[94m:1\u001B[0m"} test${"\u001B[94m (test-rule)\u001B[0m"}
               1${"\u001B[94m:2\u001B[0m"} test_2${"\u001B[94m (test-rule)\u001B[0m"}
-            """.trimIndent()
+            """
+                .trimIndent()
+                .normalizeLineEndings()
 
         private val expectedJsonOutput =
             """
@@ -104,7 +109,9 @@ class ReportGeneratorTest {
             |		]
             |	}
             |]
-            """.trimMargin()
+            """
+                .trimMargin()
+                .normalizeLineEndings()
 
         private val expectedCheckstyleOutput =
             """
@@ -115,6 +122,8 @@ class ReportGeneratorTest {
             |		<error line="1" column="2" severity="error" message="test_2" source="test-rule" />
             |	</file>
             |</checkstyle>
-            """.trimMargin()
+            """
+                .trimMargin()
+                .normalizeLineEndings()
     }
 }
