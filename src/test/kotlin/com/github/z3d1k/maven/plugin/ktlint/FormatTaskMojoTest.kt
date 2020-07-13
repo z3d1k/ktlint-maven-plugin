@@ -4,8 +4,6 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.nhaarman.mockitokotlin2.whenever
-import java.io.File
-import kotlin.test.assertTrue
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.testing.MojoRule
 import org.apache.maven.project.MavenProject
@@ -13,6 +11,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.io.File
+import kotlin.test.assertTrue
 
 @RunWith(JUnit4::class)
 class FormatTaskMojoTest {

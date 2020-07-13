@@ -3,8 +3,8 @@ package com.github.z3d1k.maven.plugin.ktlint.reports
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
 import com.pinterest.ktlint.core.ReporterProvider
-import java.util.ServiceLoader
 import org.apache.maven.plugin.logging.Log
+import java.util.ServiceLoader
 
 class ReportsGenerator(
     log: Log,

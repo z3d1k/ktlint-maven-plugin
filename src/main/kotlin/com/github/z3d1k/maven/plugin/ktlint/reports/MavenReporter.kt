@@ -2,10 +2,10 @@ package com.github.z3d1k.maven.plugin.ktlint.reports
 
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
-import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.shared.utils.logging.MessageUtils
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
 class MavenReporter(private val log: Log) : Reporter {
     private val accumulator by lazy { ConcurrentHashMap<String, MutableList<LintError>>() }
