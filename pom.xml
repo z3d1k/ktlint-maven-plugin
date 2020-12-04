@@ -4,7 +4,7 @@
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.4.0</version>
+    <version>0.5.0-SNAPSHOT</version>
 
     <name>Ktlint maven plugin</name>
     <description>Kotlin lint maven plugin using ktlint</description>
@@ -34,8 +34,8 @@
         <java.version>1.8</java.version>
         <maven-plugin-api.version>3.6.0</maven-plugin-api.version>
         <maven-plugin.version>3.6.0</maven-plugin.version>
-        <kotlin.version>1.4.10</kotlin.version>
-        <ktlint.version>0.39.0</ktlint.version>
+        <kotlin.version>1.4.20</kotlin.version>
+        <ktlint.version>0.40.0</ktlint.version>
 
         <mockitokotlin.version>2.1.0</mockitokotlin.version>
         <junit.version>4.13.1</junit.version>
@@ -76,6 +76,18 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -158,12 +170,10 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
-            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
