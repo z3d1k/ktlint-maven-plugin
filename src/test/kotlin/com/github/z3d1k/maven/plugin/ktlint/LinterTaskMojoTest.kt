@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import kotlin.test.assertEquals
@@ -89,6 +90,18 @@ class LinterTaskMojoTest {
         verify(log).error(Mockito.contains("Wildcard import"))
         verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
         verify(log).error("Ktlint lint task finished: 2 files was checked, found 2 errors in 1 files")
+        verifyNoMoreInteractions(log)
+    }
+
+    @Test
+    fun withBaseline() = withScenario("with-baseline") { _, log, throwable ->
+        if (throwable != null) {
+            fail("Exceptions were not expected")
+        }
+
+        verify(log).info(ArgumentMatchers.startsWith("Using baseline"))
+        verify(log).info("Ktlint lint task started")
+        verify(log).info("Ktlint lint task finished: 1 files was checked")
         verifyNoMoreInteractions(log)
     }
 

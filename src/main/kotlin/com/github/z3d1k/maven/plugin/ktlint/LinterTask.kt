@@ -2,6 +2,7 @@ package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.LintSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.lintFile
+import com.github.z3d1k.maven.plugin.ktlint.ktlint.loadBaseline
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
@@ -12,6 +13,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
+import java.io.File
 
 @Mojo(name = "lint", defaultPhase = LifecyclePhase.VALIDATE, threadSafe = true)
 class LinterTask : AbstractMojo() {
@@ -30,6 +32,9 @@ class LinterTask : AbstractMojo() {
     @Parameter
     private var reporters: Map<String, String> = emptyMap()
 
+    @Parameter(property = "baseline")
+    private var baseline: File? = null
+
     @Parameter
     private var failOnError: Boolean = true
 
@@ -37,6 +42,7 @@ class LinterTask : AbstractMojo() {
     override fun execute() {
         val reporterParameters = ReporterParameters.fromParametersMap(reporters)
         val reporter = ReportsGenerator(log, reporterParameters)
+        val baselineRules = loadBaseline(log, baseline)
 
         log.info("Ktlint lint task started")
         reporter.beforeAll()
@@ -48,7 +54,8 @@ class LinterTask : AbstractMojo() {
                         reporter,
                         mavenProject.basedir,
                         file,
-                        enableExperimentalRules
+                        enableExperimentalRules,
+                        baselineRules
                     )
                 }
         reporter.afterAll()

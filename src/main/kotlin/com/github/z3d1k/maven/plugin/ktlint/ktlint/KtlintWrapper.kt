@@ -32,6 +32,7 @@ fun lintFile(
     baseDir: File,
     file: File,
     enableExperimentalRules: Boolean,
+    baseline: Baseline = Baseline(),
     userProperties: Map<String, String> = emptyMap()
 ): LintSummary {
     val filePath = file.toRelativeString(baseDir)
@@ -44,8 +45,10 @@ fun lintFile(
             ruleSets = resolveRuleSets(enableExperimentalRules),
             userData = userProperties,
             cb = { error, corrected ->
-                eventList.add(error)
-                reporter.onLintError(filePath, error, corrected)
+                if (!baseline.containsError(filePath, error)) {
+                    eventList.add(error)
+                    reporter.onLintError(filePath, error, corrected)
+                }
             }
         )
     )
