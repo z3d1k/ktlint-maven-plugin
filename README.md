@@ -1,5 +1,5 @@
 # Ktlint Maven Plugin
-[![Build Status](https://travis-ci.org/z3d1k/ktlint-maven-plugin.svg?branch=master)](https://travis-ci.org/z3d1k/ktlint-maven-plugin)
+[![Build Status](https://travis-ci.com/z3d1k/ktlint-maven-plugin.svg?branch=master)](https://travis-ci.com/z3d1k/ktlint-maven-plugin)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.z3d1k/ktlint-maven-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.github.z3d1k%22%20a%3A%22ktlint-maven-plugin%22)
 [ ![Download](https://api.bintray.com/packages/z3d1k/maven/ktlint-maven-plugin/images/download.svg) ](https://bintray.com/z3d1k/maven/ktlint-maven-plugin/_latestVersion)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
