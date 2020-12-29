@@ -225,30 +225,14 @@
                 <groupId>com.github.z3d1k</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
                 <version>0.4.0</version>
-                <executions>
-                    <execution>
-                        <id>lint</id>
-                        <goals>
-                            <goal>lint</goal>
-                        </goals>
-                        <configuration>
-                            <enableExperimentalRules>true</enableExperimentalRules>
-                            <reporters>
-                                <checkstyle.output>${project.build.directory}/ktlint.xml</checkstyle.output>
-                                <json.output>${project.build.directory}/ktlint.json</json.output>
-                            </reporters>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>format</id>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <includes>src/**/*.kt</includes>
                     <excludes>src/test/resources/**/*.kt</excludes>
+                    <enableExperimentalRules>true</enableExperimentalRules>
+                    <reporters>
+                        <checkstyle.output>${project.build.directory}/ktlint.xml</checkstyle.output>
+                        <json.output>${project.build.directory}/ktlint.json</json.output>
+                    </reporters>
                 </configuration>
             </plugin>
             <plugin>
