@@ -1,10 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
-import com.github.z3d1k.maven.plugin.ktlint.ktlint.FormatSummary
-import com.github.z3d1k.maven.plugin.ktlint.ktlint.formatFile
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.github.z3d1k.maven.plugin.ktlint.utils.formatFiles
-import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
