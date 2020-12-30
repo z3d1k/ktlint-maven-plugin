@@ -1,7 +1,9 @@
 package com.github.z3d1k.maven.plugin.ktlint.utils
 
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.Baseline
+import com.github.z3d1k.maven.plugin.ktlint.ktlint.FormatSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.LintSummary
+import com.github.z3d1k.maven.plugin.ktlint.ktlint.formatFile
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.lintFile
 import com.pinterest.ktlint.core.Reporter
 import org.apache.maven.project.MavenProject
@@ -25,6 +27,18 @@ fun MavenProject.lintFiles(
     return getSourceFiles(include, exclude)
         .fold(LintSummary()) { summary, file ->
             summary + lintFile(reporter, basedir, file, enableExperimentalRules, baseline)
+        }
+}
+
+fun MavenProject.formatFiles(
+    include: String,
+    exclude: String?,
+    reporter: Reporter,
+    enableExperimentalRules: Boolean
+): FormatSummary {
+    return getSourceFiles(include, exclude)
+        .fold(FormatSummary()) { summary, file ->
+            summary + formatFile(reporter, basedir, file, enableExperimentalRules)
         }
 }
 

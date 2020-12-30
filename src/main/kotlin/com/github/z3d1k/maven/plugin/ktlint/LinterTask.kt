@@ -6,6 +6,7 @@ import com.github.z3d1k.maven.plugin.ktlint.ktlint.loadBaseline
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
 import com.github.z3d1k.maven.plugin.ktlint.utils.getSourceFiles
+import com.github.z3d1k.maven.plugin.ktlint.utils.lintFiles
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -46,18 +47,7 @@ class LinterTask : AbstractMojo() {
 
         log.info("Ktlint lint task started")
         reporter.beforeAll()
-        val lintSummary =
-            mavenProject
-                .getSourceFiles(includes, excludes)
-                .fold(LintSummary()) { summary, file ->
-                    summary + lintFile(
-                        reporter,
-                        mavenProject.basedir,
-                        file,
-                        enableExperimentalRules,
-                        baselineRules
-                    )
-                }
+        val lintSummary = mavenProject.lintFiles(includes, excludes, reporter, enableExperimentalRules, baselineRules)
         reporter.afterAll()
 
         reporterParameters.forEach { it.output.close() }
