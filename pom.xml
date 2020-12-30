@@ -186,6 +186,22 @@
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.z3d1k</groupId>
+                    <artifactId>ktlint-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>lint</id>
+                            <goals>
+                                <goal>lint</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
