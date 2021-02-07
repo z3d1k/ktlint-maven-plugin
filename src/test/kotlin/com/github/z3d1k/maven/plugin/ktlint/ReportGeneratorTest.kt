@@ -1,10 +1,12 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
-import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
+import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
 import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
+import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import com.nhaarman.mockitokotlin2.mock
 import com.pinterest.ktlint.core.LintError
+import com.pinterest.ktlint.core.Reporter
 import org.apache.maven.plugin.logging.Log
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,7 +48,7 @@ class ReportGeneratorTest {
             )
         )
         val log = mock<Log>()
-        ReportsGenerator(log, reporterParams)
+        generateReporter(log, reporterParams)
             .generateReports(errorsMap)
         val plainOutputString = plainOutput.toString().trim()
         val plainColoredOutputString = plainColoredOutput.toString().trim()
@@ -63,6 +65,18 @@ class ReportGeneratorTest {
         assertEquals(expectedCheckstyleOutput, checkstyleOutputString, "Checkstyle reporter output must match")
 
         listOf(plainOutput, plainColoredOutput, checkstyleOutput, jsonOutput).forEach { it.close() }
+    }
+
+    private fun Reporter.generateReports(lintResults: Map<String, List<LintError>>) {
+        withReporter(this) { reporter ->
+            lintResults.forEach { (fileName, lintErrors) ->
+                reporter.before(fileName)
+                lintErrors.map {
+                    reporter.onLintError(fileName, it, false)
+                }
+                reporter.after(fileName)
+            }
+        }
     }
 
     companion object {

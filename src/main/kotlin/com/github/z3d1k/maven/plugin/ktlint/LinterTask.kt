@@ -2,8 +2,9 @@ package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.loadBaseline
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
-import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
+import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
 import com.github.z3d1k.maven.plugin.ktlint.utils.lintFiles
+import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -39,13 +40,12 @@ class LinterTask : AbstractMojo() {
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
         val reporterParameters = ReporterParameters.fromParametersMap(reporters)
-        val reporter = ReportsGenerator(log, reporterParameters)
         val baselineRules = loadBaseline(log, baseline)
 
         log.info("Ktlint lint task started")
-        reporter.beforeAll()
-        val lintSummary = mavenProject.lintFiles(includes, excludes, reporter, enableExperimentalRules, baselineRules)
-        reporter.afterAll()
+        val lintSummary = withReporter(generateReporter(log, reporterParameters)) { reporter ->
+            mavenProject.lintFiles(includes, excludes, reporter, enableExperimentalRules, baselineRules)
+        }
 
         reporterParameters.forEach { it.output.close() }
         if (lintSummary.hasErrors) {

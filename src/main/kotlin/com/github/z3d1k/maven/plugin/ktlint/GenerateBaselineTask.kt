@@ -1,6 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.utils.lintFiles
+import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import com.pinterest.ktlint.reporter.baseline.BaselineReporter
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -29,13 +30,11 @@ class GenerateBaselineTask : AbstractMojo() {
 
     override fun execute() {
         val file = baseline ?: File(mavenProject.basedir, "ktlint-baseline.xml")
+        val printStream = PrintStream(file, Charsets.UTF_8.name())
 
         log.info("Start baseline generation using ${file.canonicalPath}...")
-
-        val baselineReporter = BaselineReporter(PrintStream(file, Charsets.UTF_8.name()))
-
-        baselineReporter.beforeAll()
-        mavenProject.lintFiles(includes, excludes, baselineReporter, enableExperimentalRules)
-        baselineReporter.afterAll()
+        withReporter(BaselineReporter(printStream)) { baselineReporter ->
+            mavenProject.lintFiles(includes, excludes, baselineReporter, enableExperimentalRules)
+        }
     }
 }

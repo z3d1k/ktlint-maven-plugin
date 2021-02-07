@@ -1,7 +1,8 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
-import com.github.z3d1k.maven.plugin.ktlint.reports.ReportsGenerator
+import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
 import com.github.z3d1k.maven.plugin.ktlint.utils.formatFiles
+import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -26,13 +27,10 @@ class FormatTask : AbstractMojo() {
 
     @Throws(MojoExecutionException::class, MojoFailureException::class)
     override fun execute() {
-        val reporter = ReportsGenerator(log)
-
         log.info("Ktlint format task started")
-        reporter.beforeAll()
-        val formatSummary = mavenProject.formatFiles(includes, excludes, reporter, enableExperimentalRules)
-        reporter.afterAll()
-
+        val formatSummary = withReporter(generateReporter(log)) { reporter ->
+            mavenProject.formatFiles(includes, excludes, reporter, enableExperimentalRules)
+        }
         log.info(
             "Ktlint format task finished: ${formatSummary.correctedFiles} of ${formatSummary.files} files was corrected"
         )
