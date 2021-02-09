@@ -3,8 +3,8 @@ package com.github.z3d1k.maven.plugin.ktlint
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.loadBaseline
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
+import com.github.z3d1k.maven.plugin.ktlint.utils.forAll
 import com.github.z3d1k.maven.plugin.ktlint.utils.lintFiles
-import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
@@ -43,21 +43,16 @@ class LinterTask : AbstractMojo() {
         val baselineRules = loadBaseline(log, baseline)
 
         log.info("Ktlint lint task started")
-        val lintSummary = withReporter(generateReporter(log, reporterParameters)) { reporter ->
+        val lintSummary = generateReporter(log, reporterParameters).forAll { reporter ->
             mavenProject.lintFiles(includes, excludes, reporter, enableExperimentalRules, baselineRules)
         }
 
         reporterParameters.forEach { it.output.close() }
         if (lintSummary.hasErrors) {
-            log.error(
-                "Ktlint lint task finished: ${lintSummary.files} files was checked," +
-                    " found ${lintSummary.errors} errors in ${lintSummary.filesWithErrors} files"
-            )
+            val summary = "found ${lintSummary.errors} errors in ${lintSummary.filesWithErrors} files"
+            log.error("Ktlint lint task finished: ${lintSummary.files} files was checked, $summary")
             if (failOnError) {
-                throw MojoFailureException(
-                    "Failed during ktlint execution:" +
-                        " found ${lintSummary.errors} errors in ${lintSummary.filesWithErrors} files"
-                )
+                throw MojoFailureException("Failed during ktlint execution: $summary")
             }
         } else {
             log.info("Ktlint lint task finished: ${lintSummary.files} files was checked")

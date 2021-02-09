@@ -2,8 +2,9 @@ package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
 import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
+import com.github.z3d1k.maven.plugin.ktlint.utils.forAll
+import com.github.z3d1k.maven.plugin.ktlint.utils.forFile
 import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
-import com.github.z3d1k.maven.plugin.ktlint.utils.withReporter
 import com.nhaarman.mockitokotlin2.mock
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
@@ -18,7 +19,7 @@ import kotlin.test.assertEquals
 @RunWith(JUnit4::class)
 class ReportGeneratorTest {
     @Test
-    fun testReportersFromProperties() {
+    fun `test reporters from properties`() {
         val plainOutput = ByteArrayOutputStream()
         val plainColoredOutput = ByteArrayOutputStream()
         val jsonOutput = ByteArrayOutputStream()
@@ -68,13 +69,11 @@ class ReportGeneratorTest {
     }
 
     private fun Reporter.generateReports(lintResults: Map<String, List<LintError>>) {
-        withReporter(this) { reporter ->
+        forAll { reporter ->
             lintResults.forEach { (fileName, lintErrors) ->
-                reporter.before(fileName)
-                lintErrors.map {
-                    reporter.onLintError(fileName, it, false)
+                reporter.forFile(fileName) { _, file ->
+                    lintErrors.map { reporter.onLintError(file, it, false) }
                 }
-                reporter.after(fileName)
             }
         }
     }

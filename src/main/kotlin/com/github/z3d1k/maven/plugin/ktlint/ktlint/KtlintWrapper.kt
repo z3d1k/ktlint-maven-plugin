@@ -1,6 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
+import com.github.z3d1k.maven.plugin.ktlint.utils.forFile
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
@@ -35,25 +36,25 @@ fun lintFile(
     baseline: Baseline = Baseline(),
     userProperties: Map<String, String> = emptyMap()
 ): LintSummary {
-    val filePath = file.toRelativeString(baseDir)
-    reporter.before(filePath)
-    val eventList = mutableListOf<LintError>()
-    KtLint.lint(
-        KtLint.Params(
-            fileName = file.canonicalPath,
-            text = file.readText(),
-            ruleSets = resolveRuleSets(enableExperimentalRules),
-            userData = userProperties,
-            cb = { error, corrected ->
-                if (!baseline.containsError(filePath, error)) {
-                    eventList.add(error)
-                    reporter.onLintError(filePath, error, corrected)
+    return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
+        val eventList = mutableListOf<LintError>()
+        KtLint.lint(
+            KtLint.Params(
+                fileName = file.canonicalPath,
+                text = file.readText(),
+                ruleSets = resolveRuleSets(enableExperimentalRules),
+                userData = userProperties,
+                cb = { error, corrected ->
+                    if (!baseline.containsError(filePath, error)) {
+                        eventList.add(error)
+                        reporter.onLintError(filePath, error, corrected)
+                    }
                 }
-            }
+            )
         )
-    )
-    reporter.after(filePath)
-    return LintSummary(1, if (eventList.isEmpty()) 0 else 1, eventList.size)
+
+        LintSummary(1, if (eventList.isEmpty()) 0 else 1, eventList.size)
+    }
 }
 
 fun formatFile(
@@ -63,7 +64,7 @@ fun formatFile(
     enableExperimentalRules: Boolean,
     userProperties: Map<String, String> = emptyMap()
 ): FormatSummary {
-    if (!listOf("kt", "kts").contains(file.extension.toLowerCase())) {
+    if (file.extension.toLowerCase() !in listOf("kt", "kts")) {
         return FormatSummary()
     }
     val filePath = file.toRelativeString(base)
@@ -78,7 +79,7 @@ fun formatFile(
             cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
         )
     )
-    val isFormatted = formattedSource !== sourceText
+    val isFormatted = formattedSource != sourceText
     if (isFormatted) {
         file.writeText(formattedSource)
     }

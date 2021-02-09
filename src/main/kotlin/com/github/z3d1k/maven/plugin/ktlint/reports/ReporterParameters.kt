@@ -15,26 +15,22 @@ data class ReporterParameters(
             return parametersMap
                 .map { (key, value) ->
                     val splittedKey = key.split(".", limit = 2)
-                    if (splittedKey.count() != 2) {
-                        throw IllegalArgumentException(
-                            "Reporter parameters must be formatted like this:\n" +
-                                "<{reporter_name}.{parameter_key}>{value}</{reporter_name}.{parameter_key}>"
-                        )
+                    require(splittedKey.count() != 2) {
+                        "Reporter parameters must be formatted like this:\n" +
+                            "<{reporter_name}.{parameter_key}>{value}</{reporter_name}.{parameter_key}>"
                     }
                     val (reporterName, parameterKey) = splittedKey
                     reporterName to (parameterKey to value)
                 }
                 .groupBy({ it.first }, { it.second })
-                .map { it.key to it.value.toMap() }
-                .map { (name, params) ->
+                .map { (name, paramsList) ->
                     val reporterName = if (name == "console") "plain" else name
-
-                    val reporterParametersMap =
-                        if (reporterName == "plain" && !params.containsKey("color_name")) {
-                            params + ("color_name" to Color.LIGHT_GRAY.name)
-                        } else {
-                            params
-                        } - "output"
+                    val params = paramsList.toMap()
+                    val reporterParametersMap = if (reporterName == "plain" && "color_name" !in params) {
+                        params + ("color_name" to Color.LIGHT_GRAY.name)
+                    } else {
+                        params
+                    } - "output"
 
                     ReporterParameters(
                         reporterName,
