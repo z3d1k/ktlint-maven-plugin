@@ -191,7 +191,8 @@
                     <artifactId>ktlint-maven-plugin</artifactId>
                     <executions>
                         <execution>
-                            <id>lint</id>
+                            <id>ktlint-lint</id>
+                            <phase>validate</phase>
                             <goals>
                                 <goal>lint</goal>
                             </goals>
