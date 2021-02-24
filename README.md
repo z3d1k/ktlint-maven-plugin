@@ -9,7 +9,7 @@ Plugin for running [ktlint](https://github.com/pinterest/ktlint) in maven projec
 ## Usage
 ### Check code style
 Just add this code inside ```<build><plugins>...</plugins></build>``` section of _pom.xml_ in your project:
-```xml=
+```xml
 ...
 <plugin>
     <groupId>com.github.z3d1k</groupId>
@@ -21,7 +21,7 @@ Just add this code inside ```<build><plugins>...</plugins></build>``` section of
 By default, it would run code style check against [standart ruleset](https://github.com/pinterest/ktlint#standard-rules) before code compilation takes place - on `validate` phase (see [Maven Build Lifecycle](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html) for more). Plugin will report violations in maven build log.
 
 If you want to run check after code compilation - you can configure it to run on `verify` phase like this:
-```xml=
+```xml
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
@@ -41,7 +41,7 @@ You also can run it manually by executing `mvn ktlint:lint`.
 
 ### Format sources
 To format kotlin source files in your project you could add format goal to plugin configuration:
-```xml=
+```xml
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
@@ -61,7 +61,7 @@ to run it automatically on every build, or run it manually `mvn ktlint:format`.
 
 ### Using baseline
 Ktlint also provides baseline functionality to provide ability to run checks on new code, ignoring existing style violations. To generate baseline file add it's desired path to configuration
-```xml=
+```xml
 ...
 <plugin>
     <groupId>com.github.z3d1k</groupId>
@@ -77,7 +77,7 @@ and run `mvn ktlint:generate-baseline`. After this `lint` goal would use generat
 
 ## Configuration
 ### Example configuration:
-```xml=
+```xml
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
@@ -115,11 +115,11 @@ Some options also could be configured through [EditorConfig file](https://github
 
 To enable additional reporters you need to add it's configuration to the ```<configuration><reporters>...</reporters></configuration>```.
 Parameters should be specified if following format:
-```xml=
+```xml
 <{reporter name}.{parameter name}>{value}</{reporter name}.{parameter name}>
 ```
 e.g.
-```xml=
+```xml
 <checkstyle.output>${project.build.directory}/ktlint.xml</checkstyle.output>
 ```
 
@@ -129,7 +129,7 @@ By default, following reporters are available: `checkstyle`, `json`, `html` and 
 
 ### Using 3rd party rulesets or reporters
 To use rulesets or reporters not included in ktlint by default you should add them to plugin dependencies:
-```xml=
+```xml
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
