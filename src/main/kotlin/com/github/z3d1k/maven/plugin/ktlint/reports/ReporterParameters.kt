@@ -15,7 +15,7 @@ data class ReporterParameters(
             return parametersMap
                 .map { (key, value) ->
                     val splittedKey = key.split(".", limit = 2)
-                    require(splittedKey.count() != 2) {
+                    require(splittedKey.size == 2) {
                         "Reporter parameters must be formatted like this:\n" +
                             "<{reporter_name}.{parameter_key}>{value}</{reporter_name}.{parameter_key}>"
                     }
