@@ -32,7 +32,7 @@ If you want to run check after code compilation - you can configure it to run on
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <executions>
         <execution>
             <id>ktlint-lint</id>
@@ -52,7 +52,7 @@ To format kotlin source files in your project you could add format goal to plugi
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <executions>
         <execution>
             <id>ktlint-format</id>
@@ -73,7 +73,7 @@ Ktlint also provides baseline functionality to provide ability to run checks on 
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <configuration>
         <baseline>${project.basedir}/baseline.xml</baseline>
     </configuration>
@@ -88,7 +88,7 @@ and run `mvn ktlint:generate-baseline`. After this `lint` goal would use generat
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <configuration>
          <includes>src/**/*.kt</includes>
          <excludes>src/**/Generated*.kt</excludes>
@@ -140,7 +140,7 @@ To use rulesets or reporters not included in ktlint by default you should add th
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <executions>
         ...
     </executions>

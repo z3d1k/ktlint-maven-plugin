@@ -192,7 +192,6 @@
                     <executions>
                         <execution>
                             <id>ktlint-lint</id>
-                            <phase>validate</phase>
                             <goals>
                                 <goal>lint</goal>
                             </goals>
@@ -239,11 +238,11 @@
             <plugin>
                 <groupId>com.github.z3d1k</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
-                <version>0.5.1</version>
+                <version>0.5.2</version>
                 <configuration>
                     <includes>src/**/*.kt</includes>
                     <excludes>src/test/resources/**/*.kt</excludes>
-                    <enableExperimentalRules>true</enableExperimentalRules>
+                    <enableExperimentalRules>false</enableExperimentalRules>
                     <reporters>
                         <checkstyle.output>${project.build.directory}/ktlint.xml</checkstyle.output>
                         <json.output>${project.build.directory}/ktlint.json</json.output>
