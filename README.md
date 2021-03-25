@@ -15,6 +15,13 @@ Just add this code inside ```<build><plugins>...</plugins></build>``` section of
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
     <version>0.5.1</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>lint</goal>
+            </goals>
+        </execution>
+    </executions>
 </plugin>
 ...
 ```
