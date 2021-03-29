@@ -14,7 +14,7 @@ Just add this code inside ```<build><plugins>...</plugins></build>``` section of
 <plugin>
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
-    <version>0.5.1</version>
+    <version>0.5.2</version>
     <executions>
         <execution>
             <goals>
