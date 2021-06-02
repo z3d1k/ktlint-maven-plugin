@@ -36,9 +36,9 @@ If you want to run check after code compilation - you can configure it to run on
     <executions>
         <execution>
             <id>ktlint-lint</id>
+            <phase>verify</phase>
             <goals>
                 <goal>lint</goal>
-                <phase>verify</phase>
             </goals>
         </execution>
     </executions>
@@ -56,9 +56,9 @@ To format kotlin source files in your project you could add format goal to plugi
     <executions>
         <execution>
             <id>ktlint-format</id>
+            <phase>validate</phase>
             <goals>
                 <goal>format</goal>
-                <phase>validate</phase>
             </goals>
         </execution>
     </executions>
