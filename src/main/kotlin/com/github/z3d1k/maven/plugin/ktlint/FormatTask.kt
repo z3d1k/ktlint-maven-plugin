@@ -32,7 +32,7 @@ class FormatTask : AbstractMojo() {
             mavenProject.formatFiles(includes, excludes, reporter, enableExperimentalRules)
         }
         log.info(
-            "Ktlint format task finished: ${formatSummary.correctedFiles} of ${formatSummary.files} files was corrected"
+            "Ktlint format task finished: ${formatSummary.correctedFiles} of ${formatSummary.files} files were corrected"
         )
     }
 }
