@@ -34,12 +34,12 @@
         <java.version>1.8</java.version>
         <maven-plugin-api.version>3.6.0</maven-plugin-api.version>
         <maven-plugin.version>3.6.0</maven-plugin.version>
-        <kotlin.version>1.4.31</kotlin.version>
-        <ktlint.version>0.41.0</ktlint.version>
+        <kotlin.version>1.5.21</kotlin.version>
+        <ktlint.version>0.42.0</ktlint.version>
 
-        <mockitokotlin.version>2.1.0</mockitokotlin.version>
-        <junit.version>4.13.1</junit.version>
-        <maven-sources-plugin.version>3.0.1</maven-sources-plugin.version>
+        <mockitokotlin.version>2.2.0</mockitokotlin.version>
+        <junit.version>4.13.2</junit.version>
+        <maven-sources-plugin.version>3.2.1</maven-sources-plugin.version>
         <maven-plugin-testing-harness.version>3.3.0</maven-plugin-testing-harness.version>
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>

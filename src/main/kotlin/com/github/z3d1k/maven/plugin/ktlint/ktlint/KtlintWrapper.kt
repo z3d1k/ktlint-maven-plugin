@@ -64,7 +64,7 @@ fun formatFile(
     enableExperimentalRules: Boolean,
     userProperties: Map<String, String> = emptyMap()
 ): FormatSummary {
-    if (file.extension.toLowerCase() !in listOf("kt", "kts")) {
+    if (file.extension.lowercase() !in listOf("kt", "kts")) {
         return FormatSummary()
     }
     val filePath = file.toRelativeString(base)
