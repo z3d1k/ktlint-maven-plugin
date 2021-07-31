@@ -25,7 +25,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         verify(log).info("Ktlint lint task started")
         verify(log).error("src/main/kotlin/com/example/Example.kt".normalizePath())
         verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
-        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
+        verify(log).error("Ktlint lint task finished: 1 files were checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -38,7 +38,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         verify(log).info("Ktlint lint task started")
         verify(log).error("src/main/kotlin/com/example/Example.kt".normalizePath())
         verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
-        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
+        verify(log).error("Ktlint lint task finished: 1 files were checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -49,7 +49,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         }
 
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files was checked")
+        verify(log).info("Ktlint lint task finished: 1 files were checked")
         verifyNoMoreInteractions(log)
     }
 
@@ -63,7 +63,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         verify(log).info("Ktlint lint task started")
         verify(log).error("src/main/kotlin/com/example/Example.kt".normalizePath())
         verify(log).error(Mockito.contains("Exceeded max line length"))
-        verify(log).error("Ktlint lint task finished: 1 files was checked, found 1 errors in 1 files")
+        verify(log).error("Ktlint lint task finished: 1 files were checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -78,7 +78,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         verify(log).error("src/main/kotlin/com/example/NotSuppressed.kt".normalizePath())
         verify(log).error(Mockito.contains("Wildcard import"))
         verify(log).error(Mockito.contains("Unexpected blank line(s) before \"}\""))
-        verify(log).error("Ktlint lint task finished: 2 files was checked, found 2 errors in 1 files")
+        verify(log).error("Ktlint lint task finished: 2 files were checked, found 2 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
@@ -90,7 +90,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
 
         verify(log).info(ArgumentMatchers.startsWith("Using baseline"))
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files was checked")
+        verify(log).info("Ktlint lint task finished: 1 files were checked")
         verifyNoMoreInteractions(log)
     }
 }

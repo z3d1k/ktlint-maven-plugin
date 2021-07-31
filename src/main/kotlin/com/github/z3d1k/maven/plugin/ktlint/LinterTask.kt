@@ -50,12 +50,12 @@ class LinterTask : AbstractMojo() {
         reporterParameters.forEach { it.output.close() }
         if (lintSummary.hasErrors) {
             val summary = "found ${lintSummary.errors} errors in ${lintSummary.filesWithErrors} files"
-            log.error("Ktlint lint task finished: ${lintSummary.files} files was checked, $summary")
+            log.error("Ktlint lint task finished: ${lintSummary.files} files were checked, $summary")
             if (failOnError) {
                 throw MojoFailureException("Failed during ktlint execution: $summary")
             }
         } else {
-            log.info("Ktlint lint task finished: ${lintSummary.files} files was checked")
+            log.info("Ktlint lint task finished: ${lintSummary.files} files were checked")
         }
     }
 }
