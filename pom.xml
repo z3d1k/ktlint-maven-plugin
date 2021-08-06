@@ -4,7 +4,7 @@
     <groupId>com.github.z3d1k</groupId>
     <artifactId>ktlint-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.5.3</version>
+    <version>0.5.3-SNAPSHOT</version>
 
     <name>Ktlint maven plugin</name>
     <description>Kotlin lint maven plugin using ktlint</description>
@@ -35,7 +35,7 @@
         <maven-plugin-api.version>3.6.0</maven-plugin-api.version>
         <maven-plugin.version>3.6.0</maven-plugin.version>
         <kotlin.version>1.5.21</kotlin.version>
-        <ktlint.version>0.42.0</ktlint.version>
+        <ktlint.version>0.42.1</ktlint.version>
 
         <mockitokotlin.version>2.2.0</mockitokotlin.version>
         <junit.version>4.13.2</junit.version>
