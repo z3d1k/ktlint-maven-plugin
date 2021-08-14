@@ -30,7 +30,7 @@ fun loadBaseline(log: Log, baselineFile: File?): Baseline {
 
 /**
  * Based on baseline file parsing implementation from ktlint cli.
- * [https://github.com/pinterest/ktlint/blob/master/ktlint/src/main/kotlin/com/pinterest/ktlint/internal/BaselineUtils.kt#L51]
+ * [https://github.com/pinterest/ktlint/blob/0.42.1/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/internal/BaselineSupport.kt#L53]
  */
 internal fun parseBaselineFile(baselineFile: File): Baseline {
     val builderFactory = DocumentBuilderFactory.newInstance()
