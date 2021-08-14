@@ -5,58 +5,64 @@ import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
 import com.github.z3d1k.maven.plugin.ktlint.utils.forAll
 import com.github.z3d1k.maven.plugin.ktlint.utils.forFile
 import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
+import com.github.z3d1k.maven.plugin.ktlint.utils.withMockedSystemOut
 import com.nhaarman.mockitokotlin2.mock
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
+import com.pinterest.ktlint.reporter.checkstyle.CheckStyleReporterProvider
+import com.pinterest.ktlint.reporter.json.JsonReporterProvider
+import com.pinterest.ktlint.reporter.plain.PlainReporterProvider
+import org.apache.commons.lang3.RandomStringUtils
 import org.apache.maven.plugin.logging.Log
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
+import java.nio.file.Files
+import kotlin.io.path.absolutePathString
+import kotlin.io.path.deleteIfExists
+import kotlin.io.path.readText
 import kotlin.test.assertEquals
 
 @RunWith(JUnit4::class)
 class ReportGeneratorTest {
-    @Test
-    fun `test reporters from properties`() {
-        val plainOutput = ByteArrayOutputStream()
-        val plainColoredOutput = ByteArrayOutputStream()
-        val jsonOutput = ByteArrayOutputStream()
-        val checkstyleOutput = ByteArrayOutputStream()
-        val reporterParams = listOf(
-            ReporterParameters("json", PrintStream(jsonOutput), emptyMap()),
-            ReporterParameters("checkstyle", PrintStream(checkstyleOutput), emptyMap()),
-            ReporterParameters(
-                "plain",
-                PrintStream(plainOutput),
-                mapOf(
-                    "verbose" to "true",
-                    "group_by_file" to "true",
-                    "color" to "false",
-                    "color_name" to "LIGHT_BLUE"
-                )
-            ),
-            ReporterParameters(
-                "plain",
-                PrintStream(plainColoredOutput),
-                mapOf(
-                    "verbose" to "true",
-                    "group_by_file" to "true",
-                    "color" to "true",
-                    "color_name" to "LIGHT_BLUE"
-                )
-            )
-        )
-        val log = mock<Log>()
-        generateReporter(log, reporterParams)
-            .generateReports(errorsMap)
-        val plainOutputString = plainOutput.toString().trim()
-        val plainColoredOutputString = plainColoredOutput.toString().trim()
-        val jsonOutputString = jsonOutput.toString().trim()
-        val checkstyleOutputString = checkstyleOutput.toString().trim()
+    private val log = mock<Log>()
 
-        assertEquals(expectedPlainOutputGroupVerbose, plainOutputString, "Plain reporter output must match")
+    @Test
+    fun `test reporters from properties map`() = withMockedSystemOut { consoleOutputStream ->
+        val tempPlainFile = Files.createTempFile("plain", ".txt")
+        val tempJsonFile = Files.createTempFile("json", ".json")
+        val tempCheckstyleFile = Files.createTempFile("checkstyle", ".xml")
+
+        val reporterParametersMap = mapOf(
+            // console (plain) reporter
+            "console.verbose" to "true",
+            "console.group_by_file" to "true",
+            "console.color" to "false",
+            // plain reporter
+            "plain.output" to tempPlainFile.absolutePathString(),
+            "plain.verbose" to "true",
+            "plain.group_by_file" to "true",
+            "plain.color" to "true",
+            "plain.color_name" to "LIGHT_BLUE",
+            // json reporter
+            "json.output" to tempJsonFile.absolutePathString(),
+            // checkstyle reporter
+            "checkstyle.output" to tempCheckstyleFile.absolutePathString()
+        )
+
+        val reporterParams = ReporterParameters.fromParametersMap(reporterParametersMap)
+        generateReporter(
+            log,
+            reporterParams,
+            listOf(PlainReporterProvider(), JsonReporterProvider(), CheckStyleReporterProvider())
+        ).generateReports(errorsMap)
+
+        val consoleOutput = consoleOutputStream.toString().trim()
+        val plainColoredOutputString = tempPlainFile.readText().trim()
+        val jsonOutputString = tempJsonFile.readText().trim()
+        val checkstyleOutputString = tempCheckstyleFile.readText().trim()
+
+        assertEquals(expectedPlainOutputGroupVerbose, consoleOutput, "Plain reporter output must match")
         assertEquals(
             expectedPlainOutputGroupVerboseColored,
             plainColoredOutputString,
@@ -65,7 +71,32 @@ class ReportGeneratorTest {
         assertEquals(expectedJsonOutput, jsonOutputString, "Json reporter output must match")
         assertEquals(expectedCheckstyleOutput, checkstyleOutputString, "Checkstyle reporter output must match")
 
-        listOf(plainOutput, plainColoredOutput, checkstyleOutput, jsonOutput).forEach { it.close() }
+        listOf(tempPlainFile, tempJsonFile, tempCheckstyleFile).forEach { it.deleteIfExists() }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `report parameters parsing should fail without specified output`() {
+        val parameters = mapOf("plain.verbose" to "true")
+        ReporterParameters.fromParametersMap(parameters)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `report parameters parsing should fail when incorrectly specified`() {
+        val parameters = mapOf("plain_verbose" to "true")
+        ReporterParameters.fromParametersMap(parameters)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `report generation should fail if reporter name is unknown`() {
+        val reporterParameters = ReporterParameters(
+            name = RandomStringUtils.random(10),
+            output = System.out
+        )
+        generateReporter(
+            log,
+            listOf(reporterParameters),
+            listOf(PlainReporterProvider())
+        )
     }
 
     private fun Reporter.generateReports(lintResults: Map<String, List<LintError>>) {
