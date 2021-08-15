@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class MavenReporter(private val log: Log) : Reporter {
     private val accumulator by lazy { ConcurrentHashMap<String, MutableList<LintError>>() }
+    private val reportPrefix = " ".repeat(2)
 
     override fun onLintError(file: String, err: LintError, corrected: Boolean) {
         if (!corrected) {
@@ -22,7 +23,12 @@ class MavenReporter(private val log: Log) : Reporter {
             ?.let { errors ->
                 log.error(file.formatFileString())
                 errors.forEach { lintError ->
-                    reportLintError(lintError, " ".repeat(2))
+                    // Check if line number is not negative, otherwise treat it like a file parsing error
+                    if (lintError.line >= 0) {
+                        reportLintError(lintError, reportPrefix)
+                    } else {
+                        reportParsingError(lintError, reportPrefix)
+                    }
                 }
             }
     }
@@ -34,6 +40,17 @@ class MavenReporter(private val log: Log) : Reporter {
                 .a(prefix)
                 .strong(error.line)
                 .a(":${error.col}:".pad(4))
+                .failure(error.detail)
+                .a(" (${error.ruleId})")
+                .toString()
+        log.error(message)
+    }
+
+    private fun reportParsingError(error: LintError, prefix: String) {
+        val message =
+            MessageUtils
+                .buffer()
+                .a(prefix)
                 .failure(error.detail)
                 .a(" (${error.ruleId})")
                 .toString()

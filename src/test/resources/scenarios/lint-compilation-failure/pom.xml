@@ -18,7 +18,7 @@
                 <groupId>com.github.z3d1k</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
                 <configuration>
-                    <includes>src/**/*</includes>
+                    <failOnError>true</failOnError>
                 </configuration>
             </plugin>
         </plugins>

@@ -19,5 +19,5 @@ fun generateReporter(
                 "Available reporters are: $availableReportersList"
         }
     }
-    return Reporter.from(*reportersList.toTypedArray(), MavenReporter(log))
+    return Reporter.from(MavenReporter(log), *reportersList.toTypedArray())
 }

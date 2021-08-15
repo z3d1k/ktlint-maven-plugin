@@ -28,6 +28,14 @@ data class FormatSummary(val files: Int = 0, val correctedFiles: Int = 0) {
     }
 }
 
+private fun createParsingError(throwable: Throwable) = LintError(
+    line = -1,
+    col = -1,
+    ruleId = "File processing error: ${throwable.javaClass.simpleName}",
+    detail = throwable.message ?: "Unable to process file",
+    canBeAutoCorrected = false
+)
+
 fun lintFile(
     reporter: Reporter,
     baseDir: File,
@@ -38,20 +46,24 @@ fun lintFile(
 ): LintSummary {
     return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
         val eventList = mutableListOf<LintError>()
-        KtLint.lint(
-            KtLint.Params(
-                fileName = file.canonicalPath,
-                text = file.readText(),
-                ruleSets = resolveRuleSets(enableExperimentalRules),
-                userData = userProperties,
-                cb = { error, corrected ->
-                    if (!baseline.containsError(filePath, error)) {
-                        eventList.add(error)
-                        reporter.onLintError(filePath, error, corrected)
-                    }
+        val params = KtLint.Params(
+            fileName = file.canonicalPath,
+            text = file.readText(),
+            ruleSets = resolveRuleSets(enableExperimentalRules),
+            userData = userProperties,
+            cb = { error, corrected ->
+                if (!baseline.containsError(filePath, error)) {
+                    eventList.add(error)
+                    reporter.onLintError(filePath, error, corrected)
                 }
-            )
+            }
         )
+        runCatching { KtLint.lint(params) }
+            .onFailure { e ->
+                val error = createParsingError(e)
+                eventList.add(error)
+                reporter.onLintError(filePath, error, false)
+            }
 
         LintSummary(1, if (eventList.isEmpty()) 0 else 1, eventList.size)
     }
@@ -59,7 +71,7 @@ fun lintFile(
 
 fun formatFile(
     reporter: Reporter,
-    base: File,
+    baseDir: File,
     file: File,
     enableExperimentalRules: Boolean,
     userProperties: Map<String, String> = emptyMap()
@@ -67,10 +79,9 @@ fun formatFile(
     if (file.extension.lowercase() !in listOf("kt", "kts")) {
         return FormatSummary()
     }
-    val filePath = file.toRelativeString(base)
-    val sourceText = file.readText()
-    val formattedSource = KtLint.format(
-        KtLint.Params(
+    return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
+        val sourceText = file.readText()
+        val params = KtLint.Params(
             fileName = file.canonicalPath,
             text = sourceText,
             ruleSets = resolveRuleSets(enableExperimentalRules),
@@ -78,10 +89,13 @@ fun formatFile(
             script = file.extension.equals("kts", ignoreCase = true),
             cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
         )
-    )
-    val isFormatted = formattedSource != sourceText
-    if (isFormatted) {
-        file.writeText(formattedSource)
+        val formattedSource = runCatching { KtLint.format(params) }
+            .onFailure { e -> reporter.onLintError(filePath, createParsingError(e), false) }
+            .getOrDefault(sourceText)
+        val isFormatted = formattedSource != sourceText
+        if (isFormatted) {
+            file.writeText(formattedSource)
+        }
+        FormatSummary(1, if (isFormatted) 1 else 0)
     }
-    return FormatSummary(1, if (isFormatted) 1 else 0)
 }

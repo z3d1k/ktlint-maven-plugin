@@ -93,4 +93,18 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
         verify(log).info("Ktlint lint task finished: 1 files were checked")
         verifyNoMoreInteractions(log)
     }
+
+    @Test
+    fun `compilation failed on file`() = createScenarioRunner("compilation-failure") { _, log, throwable ->
+        throwable?.let {
+            assertTrue(it is MojoFailureException)
+            assertEquals("Failed during ktlint execution: found 1 errors in 1 files", it.message)
+        } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
+
+        verify(log).info("Ktlint lint task started")
+        verify(log).error("src/main/kotlin/com/example/Invalid.kt".normalizePath())
+        verify(log).error(Mockito.contains("File processing error: ParseException"))
+        verify(log).error("Ktlint lint task finished: 2 files were checked, found 1 errors in 1 files")
+        verifyNoMoreInteractions(log)
+    }
 }
