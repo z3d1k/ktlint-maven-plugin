@@ -41,7 +41,7 @@ fun lintFile(
     baseDir: File,
     file: File,
     enableExperimentalRules: Boolean,
-    baseline: Baseline = Baseline(),
+    baseline: Baseline,
     userProperties: Map<String, String> = emptyMap()
 ): LintSummary {
     return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->

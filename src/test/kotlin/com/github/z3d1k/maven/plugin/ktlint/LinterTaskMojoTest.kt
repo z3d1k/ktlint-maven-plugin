@@ -84,13 +84,16 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
 
     @Test
     fun `with baseline`() = createScenarioRunner("with-baseline") { _, log, throwable ->
-        if (throwable != null) {
-            fail("Exceptions were not expected")
-        }
+        throwable?.let {
+            assertTrue(it is MojoFailureException)
+            assertEquals("Failed during ktlint execution: found 1 errors in 1 files", it.message)
+        } ?: fail("${MojoFailureException::class.java.canonicalName} was expected")
 
         verify(log).info(ArgumentMatchers.startsWith("Using baseline"))
         verify(log).info("Ktlint lint task started")
-        verify(log).info("Ktlint lint task finished: 1 files were checked")
+        verify(log).error("src/main/kotlin/com/example/Example.kt".normalizePath())
+        verify(log).error(Mockito.contains("Needless blank line(s)"))
+        verify(log).error("Ktlint lint task finished: 1 files were checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
 
