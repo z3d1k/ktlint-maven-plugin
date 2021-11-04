@@ -1,0 +1,29 @@
+name: Maven verify pipeline
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        java: [8]
+    env:
+      OS: ${{ matrix.os }}
+      JAVA: ${{ matrix.java }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+      - name: Build
+        run: |
+          mvn clean verify --no-transfer-progress
+      - name: Publish coverage
+        uses: codecov/codecov-action@v2
+        with:
+          env_vars: OS,JAVA
