@@ -1,5 +1,6 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
+import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -17,7 +18,10 @@ class GenerateBaselineTaskMojoTest(private val name: String) : AbstractTaskMojoT
 
         val baselineFile = File(project.basedir, baselineFileName)
         assert(baselineFile.exists())
-        assertEquals(File(project.basedir, "expected-baseline.xml").readText(), baselineFile.readText())
+        assertEquals(
+            File(project.basedir, "expected-baseline.xml").readText().normalizeLineEndings(),
+            baselineFile.readText()
+        )
     }
 
     companion object {

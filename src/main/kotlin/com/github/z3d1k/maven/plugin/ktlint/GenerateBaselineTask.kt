@@ -30,11 +30,12 @@ class GenerateBaselineTask : AbstractMojo() {
 
     override fun execute() {
         val file = baseline ?: File(mavenProject.basedir, "ktlint-baseline.xml")
-        val printStream = PrintStream(file, Charsets.UTF_8.name())
 
         log.info("Start baseline generation using ${file.canonicalPath}...")
-        BaselineReporter(printStream).forAll { baselineReporter ->
-            mavenProject.lintFiles(includes, excludes, baselineReporter, enableExperimentalRules)
+        PrintStream(file, Charsets.UTF_8.name()).use { printStream ->
+            BaselineReporter(printStream).forAll { baselineReporter ->
+                mavenProject.lintFiles(includes, excludes, baselineReporter, enableExperimentalRules)
+            }
         }
     }
 }

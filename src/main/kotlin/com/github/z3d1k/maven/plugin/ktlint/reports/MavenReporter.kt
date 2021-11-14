@@ -4,12 +4,12 @@ import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.shared.utils.logging.MessageUtils
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 class MavenReporter(private val log: Log) : Reporter {
     private val accumulator by lazy { ConcurrentHashMap<String, MutableList<LintError>>() }
     private val reportPrefix = " ".repeat(2)
+    private val defaultFileSeparator = '/'
 
     override fun onLintError(file: String, err: LintError, corrected: Boolean) {
         if (!corrected) {
@@ -58,8 +58,8 @@ class MavenReporter(private val log: Log) : Reporter {
     }
 
     private fun String.formatFileString(): String {
-        val dir = this.substringBeforeLast(File.separator, "") + File.separator
-        val name = this.substringAfterLast(File.separator)
+        val dir = this.substringBeforeLast(defaultFileSeparator, "") + defaultFileSeparator
+        val name = this.substringAfterLast(defaultFileSeparator)
         return MessageUtils
             .buffer()
             .a(dir)

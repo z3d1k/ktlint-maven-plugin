@@ -56,6 +56,7 @@ class ReportGeneratorTest {
             reporterParams,
             listOf(PlainReporterProvider(), JsonReporterProvider(), CheckStyleReporterProvider())
         ).generateReports(errorsMap)
+        reporterParams.forEach { it.output.close() }
 
         val consoleOutput = consoleOutputStream.toString().trim()
         val plainColoredOutputString = tempPlainFile.readText().trim()

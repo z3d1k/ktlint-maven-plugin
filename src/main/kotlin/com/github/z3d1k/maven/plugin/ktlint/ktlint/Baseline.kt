@@ -1,6 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.utils.associateBy
+import com.github.z3d1k.maven.plugin.ktlint.utils.invariantSeparatorPathString
 import com.github.z3d1k.maven.plugin.ktlint.utils.map
 import com.pinterest.ktlint.core.LintError
 import org.apache.maven.plugin.logging.Log
@@ -38,7 +39,7 @@ internal fun parseBaselineFile(baselineFile: File): Baseline {
     val doc = docBuilder.parse(baselineFile)
     val filesList = doc.getElementsByTagName("file")
     val rules = filesList.associateBy(
-        { fileElement -> fileElement.getAttribute("name") },
+        { fileElement -> fileElement.getAttribute("name").invariantSeparatorPathString() },
         { fileElement -> fileElement.getBaselineErrors() }
     )
     return Baseline(rules)
