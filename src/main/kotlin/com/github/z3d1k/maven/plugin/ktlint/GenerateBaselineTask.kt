@@ -1,6 +1,6 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
-import com.github.z3d1k.maven.plugin.ktlint.utils.forAll
+import com.github.z3d1k.maven.plugin.ktlint.reports.forAll
 import com.github.z3d1k.maven.plugin.ktlint.utils.lintFiles
 import com.pinterest.ktlint.reporter.baseline.BaselineReporter
 import org.apache.maven.plugin.AbstractMojo

@@ -1,0 +1,5 @@
+[*.{kt,kts}]
+max_line_length = 120
+
+[.mvn/wrapper/maven-wrapper.properties]
+insert_final_newline = false

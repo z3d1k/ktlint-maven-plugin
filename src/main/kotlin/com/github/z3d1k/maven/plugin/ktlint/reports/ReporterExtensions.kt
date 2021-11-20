@@ -1,7 +1,7 @@
-package com.github.z3d1k.maven.plugin.ktlint.utils
+package com.github.z3d1k.maven.plugin.ktlint.reports
 
+import com.github.z3d1k.maven.plugin.ktlint.utils.invariantSeparatorPathString
 import com.pinterest.ktlint.core.Reporter
-import java.io.File
 
 fun <T> Reporter.forAll(block: (Reporter) -> T): T {
     beforeAll()
@@ -17,12 +17,4 @@ fun <T> Reporter.forFile(fileName: String, block: (Reporter, String) -> T): T {
     val result = block(this, normalizedFileName)
     after(normalizedFileName)
     return result
-}
-
-fun String.invariantSeparatorPathString(separator: Char = File.separatorChar): String {
-    return if (separator != '/') {
-        replace(separator, '/')
-    } else {
-        this
-    }
 }

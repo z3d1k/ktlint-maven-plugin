@@ -1,9 +1,9 @@
 package com.github.z3d1k.maven.plugin.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.reports.ReporterParameters
+import com.github.z3d1k.maven.plugin.ktlint.reports.forAll
+import com.github.z3d1k.maven.plugin.ktlint.reports.forFile
 import com.github.z3d1k.maven.plugin.ktlint.reports.generateReporter
-import com.github.z3d1k.maven.plugin.ktlint.utils.forAll
-import com.github.z3d1k.maven.plugin.ktlint.utils.forFile
 import com.github.z3d1k.maven.plugin.ktlint.utils.normalizeLineEndings
 import com.github.z3d1k.maven.plugin.ktlint.utils.withMockedSystemOut
 import com.nhaarman.mockitokotlin2.mock

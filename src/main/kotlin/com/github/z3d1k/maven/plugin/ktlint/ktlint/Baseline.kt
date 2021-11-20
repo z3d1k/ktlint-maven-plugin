@@ -1,12 +1,12 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
-import com.github.z3d1k.maven.plugin.ktlint.utils.associateBy
 import com.github.z3d1k.maven.plugin.ktlint.utils.invariantSeparatorPathString
-import com.github.z3d1k.maven.plugin.ktlint.utils.map
 import com.pinterest.ktlint.core.LintError
 import org.apache.maven.plugin.logging.Log
 import org.w3c.dom.Element
+import org.w3c.dom.NodeList
 import java.io.File
+import java.io.InputStream
 import javax.xml.parsers.DocumentBuilderFactory
 
 data class Baseline(val rules: Map<String, List<LintError>> = emptyMap())
@@ -23,7 +23,7 @@ fun Baseline.containsError(fileName: String, error: LintError): Boolean {
 
 fun loadBaseline(log: Log, baselineFile: File?): Baseline {
     if (baselineFile == null) return Baseline()
-    return runCatching { parseBaselineFile(baselineFile) }
+    return runCatching { parseBaselineFile(baselineFile.inputStream()) }
         .onSuccess { log.info("Using baseline ${baselineFile.canonicalPath}") }
         .onFailure { log.warn("Unable to load baseline: ${it.message}") }
         .getOrDefault(Baseline())
@@ -33,7 +33,7 @@ fun loadBaseline(log: Log, baselineFile: File?): Baseline {
  * Based on baseline file parsing implementation from ktlint cli.
  * [https://github.com/pinterest/ktlint/blob/0.42.1/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/internal/BaselineSupport.kt#L53]
  */
-internal fun parseBaselineFile(baselineFile: File): Baseline {
+internal fun parseBaselineFile(baselineFile: InputStream): Baseline {
     val builderFactory = DocumentBuilderFactory.newInstance()
     val docBuilder = builderFactory.newDocumentBuilder()
     val doc = docBuilder.parse(baselineFile)
@@ -53,5 +53,16 @@ internal fun Element.getBaselineErrors(): List<LintError> {
             ruleId = errorElement.getAttribute("source"),
             detail = "" // we don't have details in the baseline file
         )
+    }
+}
+
+internal fun <T> NodeList.map(transform: (Element) -> T): List<T> {
+    return (0 until length).map { idx -> transform(item(idx) as Element) }
+}
+
+internal fun <K, V> NodeList.associateBy(keySelector: (Element) -> K, valueTransform: (Element) -> V): Map<K, V> {
+    return (0 until length).associate { idx ->
+        val item = item(idx) as Element
+        keySelector(item) to valueTransform(item)
     }
 }

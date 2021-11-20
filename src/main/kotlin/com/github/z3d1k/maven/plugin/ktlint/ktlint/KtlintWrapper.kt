@@ -1,7 +1,7 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
+import com.github.z3d1k.maven.plugin.ktlint.reports.forFile
 import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
-import com.github.z3d1k.maven.plugin.ktlint.utils.forFile
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
@@ -41,8 +41,7 @@ fun lintFile(
     baseDir: File,
     file: File,
     enableExperimentalRules: Boolean,
-    baseline: Baseline,
-    userProperties: Map<String, String> = emptyMap()
+    baseline: Baseline
 ): LintSummary {
     return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
         val eventList = mutableListOf<LintError>()
@@ -50,7 +49,6 @@ fun lintFile(
             fileName = file.canonicalPath,
             text = file.readText(),
             ruleSets = resolveRuleSets(enableExperimentalRules),
-            userData = userProperties,
             cb = { error, corrected ->
                 if (!baseline.containsError(filePath, error)) {
                     eventList.add(error)
@@ -73,8 +71,7 @@ fun formatFile(
     reporter: Reporter,
     baseDir: File,
     file: File,
-    enableExperimentalRules: Boolean,
-    userProperties: Map<String, String> = emptyMap()
+    enableExperimentalRules: Boolean
 ): FormatSummary {
     if (file.extension.lowercase() !in listOf("kt", "kts")) {
         return FormatSummary()
@@ -85,7 +82,6 @@ fun formatFile(
             fileName = file.canonicalPath,
             text = sourceText,
             ruleSets = resolveRuleSets(enableExperimentalRules),
-            userData = userProperties,
             script = file.extension.equals("kts", ignoreCase = true),
             cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
         )
