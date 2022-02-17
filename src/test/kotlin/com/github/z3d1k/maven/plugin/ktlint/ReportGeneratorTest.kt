@@ -136,23 +136,23 @@ class ReportGeneratorTest {
         private val expectedJsonOutput =
             """
             |[
-            |	{
-            |		"file": "test.kt",
-            |		"errors": [
-            |			{
-            |				"line": 1,
-            |				"column": 1,
-            |				"message": "test",
-            |				"rule": "test-rule"
-            |			},
-            |			{
-            |				"line": 1,
-            |				"column": 2,
-            |				"message": "test_2",
-            |				"rule": "test-rule"
-            |			}
-            |		]
-            |	}
+            |    {
+            |        "file": "test.kt",
+            |        "errors": [
+            |            {
+            |                "line": 1,
+            |                "column": 1,
+            |                "message": "test",
+            |                "rule": "test-rule"
+            |            },
+            |            {
+            |                "line": 1,
+            |                "column": 2,
+            |                "message": "test_2",
+            |                "rule": "test-rule"
+            |            }
+            |        ]
+            |    }
             |]
             """
                 .trimMargin()
@@ -162,10 +162,10 @@ class ReportGeneratorTest {
             """
             |<?xml version="1.0" encoding="utf-8"?>
             |<checkstyle version="8.0">
-            |	<file name="test.kt">
-            |		<error line="1" column="1" severity="error" message="test" source="test-rule" />
-            |		<error line="1" column="2" severity="error" message="test_2" source="test-rule" />
-            |	</file>
+            |    <file name="test.kt">
+            |        <error line="1" column="1" severity="error" message="test" source="test-rule" />
+            |        <error line="1" column="2" severity="error" message="test_2" source="test-rule" />
+            |    </file>
             |</checkstyle>
             """
                 .trimMargin()
