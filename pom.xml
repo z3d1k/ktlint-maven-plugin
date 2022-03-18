@@ -35,7 +35,7 @@
         <maven-plugin-api.version>3.6.0</maven-plugin-api.version>
         <maven-plugin.version>3.6.0</maven-plugin.version>
         <kotlin.version>1.6.10</kotlin.version>
-        <ktlint.version>0.44.0</ktlint.version>
+        <ktlint.version>0.45.0</ktlint.version>
 
         <mockitokotlin.version>2.2.0</mockitokotlin.version>
         <junit.version>4.13.2</junit.version>
