@@ -20,6 +20,12 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'zulu'
+      - uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Build
         run: |
           mvn clean verify --no-transfer-progress
