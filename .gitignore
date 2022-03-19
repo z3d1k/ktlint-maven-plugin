@@ -18,6 +18,7 @@
 .classpath
 .settings
 .project
+.vscode
 .DS_Store
 test-output
 /.integration-scripts
