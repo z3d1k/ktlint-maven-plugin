@@ -30,6 +30,7 @@ jobs:
         run: |
           mvn clean install --no-transfer-progress
       - name: Run plugin against its codebase
+        if: ${{ env.OS != 'windows-latest' }}
         run: |
           GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
           ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
