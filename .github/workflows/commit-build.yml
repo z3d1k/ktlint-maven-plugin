@@ -34,7 +34,7 @@ jobs:
           GROUP_ID=$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)
           ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          mvn $GROUP_ID\:$ARTIFACT_ID\:$VERSION\:lint
+          mvn -e $GROUP_ID\:$ARTIFACT_ID\:$VERSION\:lint
       - name: Publish coverage
         uses: codecov/codecov-action@v2
         with:
