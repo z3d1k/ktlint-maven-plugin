@@ -5,6 +5,7 @@ import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
+import com.pinterest.ktlint.core.VisitorProvider
 import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import java.io.File
 
@@ -58,7 +59,8 @@ fun lintFile(
                 }
             }
         )
-        runCatching { KtLint.lint(params) }
+        val visitorProvider = VisitorProvider(params.ruleSets, debug = false, isUnitTestContext = false)
+        runCatching { KtLint.lint(params, visitorProvider) }
             .onFailure { e ->
                 val error = createParsingError(e)
                 eventList.add(error)
@@ -88,7 +90,8 @@ fun formatFile(
             script = file.extension.equals("kts", ignoreCase = true),
             cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
         )
-        val formattedSource = runCatching { KtLint.format(params) }
+        val visitorProvider = VisitorProvider(params.ruleSets, debug = false, isUnitTestContext = false)
+        val formattedSource = runCatching { KtLint.format(params, params.ruleSets, visitorProvider) }
             .onFailure { e -> reporter.onLintError(filePath, createParsingError(e), false) }
             .getOrDefault(sourceText)
         val isFormatted = formattedSource != sourceText
