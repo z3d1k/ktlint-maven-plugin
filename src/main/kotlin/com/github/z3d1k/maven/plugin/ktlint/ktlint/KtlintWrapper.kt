@@ -5,6 +5,7 @@ import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
+import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import java.io.File
 
 data class LintSummary(val files: Int = 0, val filesWithErrors: Int = 0, val errors: Int = 0) {
@@ -36,6 +37,7 @@ private fun createParsingError(throwable: Throwable) = LintError(
     canBeAutoCorrected = false
 )
 
+@OptIn(FeatureInAlphaState::class)
 fun lintFile(
     reporter: Reporter,
     baseDir: File,
@@ -45,7 +47,7 @@ fun lintFile(
 ): LintSummary {
     return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
         val eventList = mutableListOf<LintError>()
-        val params = KtLint.Params(
+        val params = KtLint.ExperimentalParams(
             fileName = file.canonicalPath,
             text = file.readText(),
             ruleSets = resolveRuleSets(enableExperimentalRules),
@@ -67,6 +69,7 @@ fun lintFile(
     }
 }
 
+@OptIn(FeatureInAlphaState::class)
 fun formatFile(
     reporter: Reporter,
     baseDir: File,
@@ -78,7 +81,7 @@ fun formatFile(
     }
     return reporter.forFile(file.toRelativeString(baseDir)) { _, filePath ->
         val sourceText = file.readText()
-        val params = KtLint.Params(
+        val params = KtLint.ExperimentalParams(
             fileName = file.canonicalPath,
             text = sourceText,
             ruleSets = resolveRuleSets(enableExperimentalRules),

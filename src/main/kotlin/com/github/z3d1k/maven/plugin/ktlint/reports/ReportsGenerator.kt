@@ -8,7 +8,7 @@ import java.util.ServiceLoader
 fun generateReporter(
     log: Log,
     reporterParameters: List<ReporterParameters> = emptyList(),
-    reporterProviders: Iterable<ReporterProvider> = ServiceLoader.load(ReporterProvider::class.java)
+    reporterProviders: Iterable<ReporterProvider<out Reporter>> = ServiceLoader.load(ReporterProvider::class.java)
 ): Reporter {
     val reporterProvidersMap = reporterProviders.associateBy { it.id }
     val reportersList = reporterParameters.map { (name, printStream, parameters) ->
