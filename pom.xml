@@ -249,6 +249,9 @@
                 </executions>
                 <configuration>
                     <jvmTarget>${java.version}</jvmTarget>
+                    <args>
+                        <arg>-opt-in=kotlin.RequiresOptIn</arg>
+                    </args>
                 </configuration>
             </plugin>
             <plugin>
