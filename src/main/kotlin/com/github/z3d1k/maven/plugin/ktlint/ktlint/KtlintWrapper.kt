@@ -1,12 +1,10 @@
 package com.github.z3d1k.maven.plugin.ktlint.ktlint
 
 import com.github.z3d1k.maven.plugin.ktlint.reports.forFile
-import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleSets
+import com.github.z3d1k.maven.plugin.ktlint.rules.resolveRuleProviders
 import com.pinterest.ktlint.core.KtLint
 import com.pinterest.ktlint.core.LintError
 import com.pinterest.ktlint.core.Reporter
-import com.pinterest.ktlint.core.VisitorProvider
-import com.pinterest.ktlint.core.api.FeatureInAlphaState
 import java.io.File
 
 data class LintSummary(val files: Int = 0, val filesWithErrors: Int = 0, val errors: Int = 0) {
@@ -38,7 +36,6 @@ private fun createParsingError(throwable: Throwable) = LintError(
     canBeAutoCorrected = false
 )
 
-@OptIn(FeatureInAlphaState::class)
 fun lintFile(
     reporter: Reporter,
     baseDir: File,
@@ -51,16 +48,16 @@ fun lintFile(
         val params = KtLint.ExperimentalParams(
             fileName = file.canonicalPath,
             text = file.readText(),
-            ruleSets = resolveRuleSets(enableExperimentalRules),
+            ruleProviders = resolveRuleProviders(enableExperimentalRules),
             cb = { error, corrected ->
                 if (!baseline.containsError(filePath, error)) {
                     eventList.add(error)
                     reporter.onLintError(filePath, error, corrected)
                 }
-            }
+            },
+            debug = false
         )
-        val visitorProvider = VisitorProvider(params.ruleSets, debug = false, isUnitTestContext = false)
-        runCatching { KtLint.lint(params, visitorProvider) }
+        runCatching { KtLint.lint(params) }
             .onFailure { e ->
                 val error = createParsingError(e)
                 eventList.add(error)
@@ -71,7 +68,6 @@ fun lintFile(
     }
 }
 
-@OptIn(FeatureInAlphaState::class)
 fun formatFile(
     reporter: Reporter,
     baseDir: File,
@@ -86,12 +82,12 @@ fun formatFile(
         val params = KtLint.ExperimentalParams(
             fileName = file.canonicalPath,
             text = sourceText,
-            ruleSets = resolveRuleSets(enableExperimentalRules),
+            ruleProviders = resolveRuleProviders(enableExperimentalRules),
             script = file.extension.equals("kts", ignoreCase = true),
-            cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) }
+            cb = { lintError, corrected -> reporter.onLintError(filePath, lintError, corrected) },
+            debug = false
         )
-        val visitorProvider = VisitorProvider(params.ruleSets, debug = false, isUnitTestContext = false)
-        val formattedSource = runCatching { KtLint.format(params, params.ruleSets, visitorProvider) }
+        val formattedSource = runCatching { KtLint.format(params) }
             .onFailure { e -> reporter.onLintError(filePath, createParsingError(e), false) }
             .getOrDefault(sourceText)
         val isFormatted = formattedSource != sourceText

@@ -19,7 +19,7 @@ fun MavenProject.lintFiles(
     exclude: String?,
     reporter: Reporter,
     enableExperimentalRules: Boolean,
-    baseline: Baseline = Baseline(),
+    baseline: Baseline = Baseline()
 ): LintSummary {
     return getSourceFiles(include, exclude)
         .fold(LintSummary()) { summary, file ->
