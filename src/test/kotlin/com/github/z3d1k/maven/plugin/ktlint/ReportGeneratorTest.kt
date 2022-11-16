@@ -127,8 +127,8 @@ class ReportGeneratorTest {
         private val expectedPlainOutputGroupVerboseColored =
             """
             ${"\u001B[94m\u001B[0m"}test.kt
-              1${"\u001B[94m:1\u001B[0m"} test${"\u001B[94m (test-rule)\u001B[0m"}
-              1${"\u001B[94m:2\u001B[0m"} test_2${"\u001B[94m (test-rule)\u001B[0m"}
+              1${"\u001B[94m:1\u001B[0m"} test ${"\u001B[94m(test-rule)\u001B[0m"}
+              1${"\u001B[94m:2\u001B[0m"} test_2 ${"\u001B[94m(test-rule)\u001B[0m"}
             """
                 .trimIndent()
                 .normalizeLineEndings()

@@ -27,7 +27,7 @@ class FormatTaskMojoTest : AbstractTaskMojoTest("format") {
     fun `compilation failed on file`() = createScenarioRunner("compilation-failure") { _, log, _ ->
         verify(log).info("Ktlint format task started")
         verify(log).error("src/main/kotlin/com/example/Invalid.kt")
-        verify(log).error(Mockito.contains("File processing error: ParseException"))
+        verify(log).error(Mockito.contains("File processing error: KtLintParseException"))
         verify(log).info("Ktlint format task finished: 0 of 2 files were corrected")
         verifyNoMoreInteractions(log)
     }

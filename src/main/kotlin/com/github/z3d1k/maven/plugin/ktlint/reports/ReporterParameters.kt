@@ -1,6 +1,6 @@
 package com.github.z3d1k.maven.plugin.ktlint.reports
 
-import com.pinterest.ktlint.reporter.plain.internal.Color
+import com.pinterest.ktlint.reporter.plain.Color
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Files
@@ -47,7 +47,7 @@ data class ReporterParameters(
                     requireNotNull(filename) { "Output path not specified for reporter \"$reporterName\"" }
                     File(filename)
                         .also { Files.createDirectories(it.parentFile.toPath()) }
-                        .let { PrintStream(it) }
+                        .let(::PrintStream)
                 }
             }
         }

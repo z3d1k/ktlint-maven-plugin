@@ -2,7 +2,7 @@ package com.github.z3d1k.maven.plugin.ktlint.rules
 
 import com.pinterest.ktlint.core.RuleProvider
 import com.pinterest.ktlint.core.RuleSetProviderV2
-import com.pinterest.ktlint.ruleset.experimental.experimentalRulesetId
+import com.pinterest.ktlint.ruleset.experimental.EXPERIMENTAL_RULE_SET_ID
 import java.util.ServiceLoader
 
 fun resolveRuleProviders(
@@ -17,4 +17,4 @@ fun resolveRuleProviders(
 fun filterRuleSetProviders(
     enableExperimentalRules: Boolean,
     providers: Iterable<RuleSetProviderV2>
-) = providers.filter { provider -> enableExperimentalRules || provider.id != experimentalRulesetId }
+) = providers.filter { provider -> enableExperimentalRules || provider.id != EXPERIMENTAL_RULE_SET_ID }

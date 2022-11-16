@@ -10,7 +10,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
-import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.name
 import kotlin.test.assertFalse

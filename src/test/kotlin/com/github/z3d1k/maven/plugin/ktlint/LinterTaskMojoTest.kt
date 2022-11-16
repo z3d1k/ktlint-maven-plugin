@@ -105,7 +105,7 @@ class LinterTaskMojoTest : AbstractTaskMojoTest("lint") {
 
         verify(log).info("Ktlint lint task started")
         verify(log).error("src/main/kotlin/com/example/Invalid.kt")
-        verify(log).error(Mockito.contains("File processing error: ParseException"))
+        verify(log).error(Mockito.contains("File processing error: KtLintParseException"))
         verify(log).error("Ktlint lint task finished: 2 files were checked, found 1 errors in 1 files")
         verifyNoMoreInteractions(log)
     }
