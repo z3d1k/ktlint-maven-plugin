@@ -120,6 +120,9 @@ class ReportGeneratorTest {
             test.kt
               1:1 test (test-rule)
               1:2 test_2 (test-rule)
+
+            Summary error count (descending) by rule:
+              test-rule: 2
             """
                 .trimIndent()
                 .normalizeLineEndings()
@@ -129,6 +132,9 @@ class ReportGeneratorTest {
             ${"\u001B[94m\u001B[0m"}test.kt
               1${"\u001B[94m:1\u001B[0m"} test ${"\u001B[94m(test-rule)\u001B[0m"}
               1${"\u001B[94m:2\u001B[0m"} test_2 ${"\u001B[94m(test-rule)\u001B[0m"}
+
+            Summary error count (descending) by rule:
+              test-rule: 2
             """
                 .trimIndent()
                 .normalizeLineEndings()
