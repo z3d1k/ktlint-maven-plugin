@@ -4,14 +4,18 @@ import com.github.z3d1k.maven.plugin.ktlint.ktlint.Baseline
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.FormatSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.LintSummary
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.formatFile
+import com.github.z3d1k.maven.plugin.ktlint.ktlint.initKtLintRuleEngine
 import com.github.z3d1k.maven.plugin.ktlint.ktlint.lintFile
 import com.pinterest.ktlint.core.Reporter
 import org.apache.maven.project.MavenProject
 import org.apache.maven.shared.utils.io.FileUtils
 import java.io.File
+import java.nio.file.Path
 
-fun MavenProject.getSourceFiles(include: String, exclude: String?): List<File> {
-    return FileUtils.getFiles(basedir, include, exclude, true)
+fun MavenProject.getSourceFiles(include: String, exclude: String?): List<Path> {
+    return FileUtils
+        .getFiles(basedir, include, exclude, true)
+        .map(File::toPath)
 }
 
 fun MavenProject.lintFiles(
@@ -21,9 +25,10 @@ fun MavenProject.lintFiles(
     enableExperimentalRules: Boolean,
     baseline: Baseline = Baseline()
 ): LintSummary {
+    val ruleEngine = initKtLintRuleEngine(enableExperimentalRules)
     return getSourceFiles(include, exclude)
         .fold(LintSummary()) { summary, file ->
-            summary + lintFile(reporter, basedir, file, enableExperimentalRules, baseline)
+            summary + lintFile(ruleEngine, reporter, basedir.toPath(), file, baseline)
         }
 }
 
@@ -33,9 +38,10 @@ fun MavenProject.formatFiles(
     reporter: Reporter,
     enableExperimentalRules: Boolean
 ): FormatSummary {
+    val ruleEngine = initKtLintRuleEngine(enableExperimentalRules)
     return getSourceFiles(include, exclude)
         .fold(FormatSummary()) { summary, file ->
-            summary + formatFile(reporter, basedir, file, enableExperimentalRules)
+            summary + formatFile(ruleEngine, reporter, basedir.toPath(), file)
         }
 }
 
