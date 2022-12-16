@@ -13,7 +13,8 @@ ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
 # Disabling KtLint rules for trailing comma as it does not have a way to allow usage of trailing commas
 # without enforcing it everywhere.
-ktlint_disabled_rules = trailing-comma-on-call-site,trailing-comma-on-declaration-site
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
 
 [.mvn/wrapper/maven-wrapper.properties]
 insert_final_newline = false
