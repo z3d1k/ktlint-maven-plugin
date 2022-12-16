@@ -63,7 +63,7 @@ fun lintFile(
     return reporter.forFile(file.relativeTo(baseDir).pathString) { _, filePath ->
         val eventList = mutableListOf<LintError>()
         runCatching {
-            ruleEngine.lint(file.readText(), file) { error ->
+            ruleEngine.lint(file) { error ->
                 if (!baseline.containsError(filePath, error)) {
                     eventList.add(error)
                     reporter.onLintError(filePath, error, false)
@@ -91,7 +91,7 @@ fun formatFile(
     return reporter.forFile(file.relativeTo(baseDir).pathString) { _, filePath ->
         val sourceText = file.readText()
         val formattedSource = runCatching {
-            ruleEngine.format(sourceText, file) { error, corrected ->
+            ruleEngine.format(file) { error, corrected ->
                 reporter.onLintError(filePath, error, corrected)
             }
         }
